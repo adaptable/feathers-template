@@ -19,7 +19,7 @@ function loadAdaptableConfigSchema() {
     const configPath = path.join(".", ".adaptable", "config.schema.json");
     if (!fs.existsSync(configPath)) return undefined;
     const schemaText = fs.readFileSync(configPath);
-    const schema = parseYAMLorJSON(schemaText);
+    const schema = JSON.parse(schemaText.toString());
     if (typeof schema !== "object" || Array.isArray(schema)) {
         throw new Error("Invalid Adaptable template config schema, not an object");
     }

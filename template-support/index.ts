@@ -1,9 +1,10 @@
 /* eslint-disable import/prefer-default-export */
-import * as fs from "fs";
-import * as path from "path";
-import { safeLoad } from "js-yaml";
 import Ajv from "ajv";
 import dotenv from "dotenv";
+import * as fs from "fs";
+import { safeLoad } from "js-yaml";
+import { parse } from "json5";
+import * as path from "path";
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ function parseYAMLorJSON(buf: Buffer | string) {
     try {
         return safeLoad(buf.toString());
     } catch (e) {
-        return JSON.parse(buf.toString());
+        return parse(buf.toString());
     }
 }
 
@@ -19,7 +20,7 @@ function loadAdaptableConfigSchema() {
     const configPath = path.join(".", ".adaptable", "config.schema.json");
     if (!fs.existsSync(configPath)) return undefined;
     const schemaText = fs.readFileSync(configPath);
-    const schema = JSON.parse(schemaText.toString());
+    const schema = parse(schemaText.toString());
     if (typeof schema !== "object" || Array.isArray(schema)) {
         throw new Error("Invalid Adaptable template config schema, not an object");
     }

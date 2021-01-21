@@ -1,0 +1,8 @@
+{
+    gcloud: {
+        projectId: "adaptable-test-284300",
+        creds: "creds",
+        region: "us-west1",
+    }
+}
+

@@ -3,23 +3,13 @@ import Adapt, {
     SFCBuildProps,
     Group,
     handle,
+    useMethod,
 } from "@adpt/core";
-import { CloudRunAdapter } from "@adpt/cloud/gcloud";
-import { LocalDockerImage } from "@adpt/cloud/docker";
+import { CloudRun } from "@adpt/cloud/gcloud";
+import { LocalNodeImage } from "@adpt/cloud/nodejs";
+import { config, GCloudConfig } from "./common";
 import { prodStyle } from "./styles";
-import { loadAdaptableConfig } from "./template-support";
-
-interface GCloudConfig {
-    projectId: string;
-    creds: string;
-    region: string;
-}
-
-interface Config {
-    gcloud: GCloudConfig;
-}
-
-const config = loadAdaptableConfig<Config>();
+import { DockerImageInstance } from "@adpt/cloud/docker";
 
 interface GCloudProps {
     gcloud: GCloudConfig;
@@ -33,12 +23,35 @@ function Database(props: SFCDeclProps<DatabaseProps>) { return null; }
 
 function MainRepo(props: SFCDeclProps<MainRepoProps>) {
     const { key, gcloud } = props as SFCBuildProps<MainRepoProps>;
-    const { projectId, region } = gcloud;
-    const img = handle();
+    const { region } = gcloud;
+    const srcDir = process.env.ADAPTABLE_SOURCE_REPO;
+    if (!srcDir) throw new Error(`ADAPTABLE_SOURCE_REPO must be set`);
+
+    const imgHand = handle<DockerImageInstance>();
+    const image = useMethod(imgHand, "latestImage");
+    const imageStr = image?.registryRef;
+
     return (
         <Group key={key}>
-            <LocalDockerImage key={`${key}-img`} handle={img} />
-            <CloudRunAdapter key={key} image={img} region={region} port={80} registryUrl={`gcr.io/${projectId}`} />
+            <LocalNodeImage
+                key={`${key}-img`}
+                handle={imgHand}
+                options={{
+                    imageName: "myapp",
+                    packageManager: "yarn",
+                }}
+                srcDir={srcDir}
+            />
+            {imageStr ?
+                <CloudRun
+                    key={key}
+                    allowUnauthenticated
+                    image={imageStr}
+                    port={80}
+                    region={region}
+                />
+                : null
+            }
         </Group>
     );
 }
@@ -48,10 +61,10 @@ function App() {
     // Insert gcloud credentials into gcloud app here.
     return (
         <Group key="app">
-            <MainRepo key="main-repo" gcloud={config.gcloud || "unknown"} />
-            <Database key="database" gcloud={config.gcloud || "unknown"} />
+            <MainRepo key="main-repo" gcloud={config.gcloud} />
+            <Database key="database" gcloud={config.gcloud} />
         </Group>
     );
 }
 
-Adapt.stack("default", <App />, prodStyle);
+Adapt.stack("default", <App />, prodStyle());

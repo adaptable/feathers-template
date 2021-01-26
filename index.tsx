@@ -7,9 +7,9 @@ import Adapt, {
 } from "@adpt/core";
 import { CloudRun } from "@adpt/cloud/gcloud";
 import { LocalNodeImage } from "@adpt/cloud/nodejs";
+import { DockerImageInstance } from "@adpt/cloud/docker";
 import { config, GCloudConfig } from "./common";
 import { prodStyle } from "./styles";
-import { DockerImageInstance } from "@adpt/cloud/docker";
 
 interface GCloudProps {
     gcloud: GCloudConfig;
@@ -42,7 +42,7 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
                 }}
                 srcDir={srcDir}
             />
-            {imageStr ?
+            {imageStr ? (
                 <CloudRun
                     key={key}
                     allowUnauthenticated
@@ -50,8 +50,8 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
                     port={80}
                     region={region}
                 />
-                : null
-            }
+            )
+                : null}
         </Group>
     );
 }

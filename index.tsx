@@ -1,15 +1,21 @@
+import { config as adaptableConfig, HttpsLoadBalancer } from "@adaptable/cloud";
 import Adapt, {
     SFCDeclProps,
     SFCBuildProps,
     Group,
     handle,
     useMethod,
+    useAsync,
+    callInstanceMethod,
 } from "@adpt/core";
-import { CloudRun } from "@adpt/cloud/gcloud";
 import { LocalNodeImage } from "@adpt/cloud/nodejs";
 import { DockerImageInstance } from "@adpt/cloud/docker";
+import { CloudRun, CloudRunInstance } from "@adpt/cloud/gcloud";
+import { URL } from "url";
 import { config, GCloudConfig } from "./common";
 import { prodStyle } from "./styles";
+
+const { adaptableDomainName, appId, appName } = adaptableConfig();
 
 interface GCloudProps {
     gcloud: GCloudConfig;
@@ -31,6 +37,17 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
     const image = useMethod(imgHand, "latestImage");
     const imageStr = image?.registryRef;
 
+    const runHand = handle<CloudRunInstance>();
+    const runUrl = useAsync(
+        () => callInstanceMethod<string | undefined>(runHand, undefined, "url"),
+        undefined,
+    );
+    let runHost: string | undefined;
+    if (runUrl) {
+        const u = new URL(runUrl);
+        runHost = u.hostname;
+    }
+
     return (
         <Group key={key}>
             <LocalNodeImage
@@ -45,13 +62,24 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
             {imageStr ? (
                 <CloudRun
                     key={key}
+                    handle={runHand}
                     allowUnauthenticated
                     image={imageStr}
                     port={80}
                     region={region}
                 />
-            )
-                : null}
+            ) : null}
+
+            {runHost ? (
+                <HttpsLoadBalancer
+                    key={`${key}-lb`}
+                    appId={appId}
+                    hostname={`${appName}.${adaptableDomainName}`}
+                    name="main"
+                    target={runHost}
+                    hostHeader={runHost}
+                />
+            ) : null}
         </Group>
     );
 }

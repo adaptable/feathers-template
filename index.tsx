@@ -1,35 +1,23 @@
-import { config as adaptableConfig, HttpsLoadBalancer } from "@adaptable/cloud";
+import { config as adaptableConfig, Database, HttpsLoadBalancer } from "@adaptable/cloud";
 import Adapt, {
-    SFCDeclProps,
-    SFCBuildProps,
     Group,
     handle,
     useMethod,
     useAsync,
     callInstanceMethod,
 } from "@adpt/core";
+import { mergeEnvPairs, useConnectTo } from "@adpt/cloud";
 import { LocalNodeImage } from "@adpt/cloud/nodejs";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { CloudRun, CloudRunInstance } from "@adpt/cloud/gcloud";
 import { URL } from "url";
-import { config, GCloudConfig } from "./common";
+import { config } from "./common";
 import { prodStyle } from "./styles";
 
 const { adaptableDomainName, appId, appName } = adaptableConfig();
 
-interface GCloudProps {
-    gcloud: GCloudConfig;
-}
-
-interface MainRepoProps extends GCloudProps {}
-interface DatabaseProps extends GCloudProps {}
-
-// FIXME(manishv) instantiate a proper Postgres CloudSQL instance here
-function Database(props: SFCDeclProps<DatabaseProps>) { return null; }
-
-function MainRepo(props: SFCDeclProps<MainRepoProps>) {
-    const { key, gcloud } = props as SFCBuildProps<MainRepoProps>;
-    const { region } = gcloud;
+function App() {
+    const { region } = config.gcloud;
     const srcDir = process.env.ADAPTABLE_SOURCE_REPO;
     if (!srcDir) throw new Error(`ADAPTABLE_SOURCE_REPO must be set`);
 
@@ -48,10 +36,14 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
         runHost = u.hostname;
     }
 
+    const dbHand = handle();
+    const dbEnv = useConnectTo(dbHand);
+    const env = mergeEnvPairs(dbEnv, { NODE_ENV: "production" });
+
     return (
-        <Group key={key}>
+        <Group key="app">
             <LocalNodeImage
-                key={`${key}-img`}
+                key="app-img"
                 handle={imgHand}
                 options={{
                     imageName: "myapp",
@@ -59,11 +51,20 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
                 }}
                 srcDir={srcDir}
             />
-            {imageStr ? (
+            <Database
+                key="db"
+                handle={dbHand}
+                appId={appId}
+                name="main"
+                plan="hobby"
+                type="mssql"
+            />
+            {imageStr && dbEnv ? (
                 <CloudRun
-                    key={key}
+                    key="app"
                     handle={runHand}
                     allowUnauthenticated
+                    env={env}
                     image={imageStr}
                     port={80}
                     region={region}
@@ -72,7 +73,7 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
 
             {runHost ? (
                 <HttpsLoadBalancer
-                    key={`${key}-lb`}
+                    key="lb"
                     appId={appId}
                     hostname={`${appName}.${adaptableDomainName}`}
                     name="main"
@@ -80,17 +81,6 @@ function MainRepo(props: SFCDeclProps<MainRepoProps>) {
                     hostHeader={runHost}
                 />
             ) : null}
-        </Group>
-    );
-}
-
-function App() {
-    // Download gcloud tools here
-    // Insert gcloud credentials into gcloud app here.
-    return (
-        <Group key="app">
-            <MainRepo key="main-repo" gcloud={config.gcloud} />
-            <Database key="database" gcloud={config.gcloud} />
         </Group>
     );
 }

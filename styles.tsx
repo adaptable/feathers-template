@@ -2,26 +2,35 @@
 /* eslint-disable import/prefer-default-export */
 import Adapt, { Style } from "@adpt/core";
 import { BuildKitImage, LocalDockerImage, LocalDockerImageProps } from "@adpt/cloud/docker";
-import { config } from "./common";
+import { UserError } from "@adpt/utils";
 
 export const prodStyle = () => {
-    const registry = "gcr.io";
-    const imageName = `${config.gcloud.projectId}/app-image`;
+    const fullRepo = process.env.ADAPTABLE_DOCKER_REPO;
+    if (!fullRepo) {
+        throw new UserError("ADAPTABLE_DOCKER_REPO must be set");
+    }
+    const [registry, ...repoPath] = fullRepo.split("/");
     return (
         <Style>
             {LocalDockerImage}
-            {Adapt.rule<LocalDockerImageProps>(({ handle, options = {}, ...props }) => (
-                <BuildKitImage
-                    {...props}
-                    options={{ ...options, buildKitHost: process.env.BUILDKIT_HOST }}
-                    output={{
-                        ...options,
-                        imageName,
-                        type: "registry",
-                        registry,
-                    }}
-                />
-            ))}
+            {Adapt.rule<LocalDockerImageProps>(({ handle, options = {}, ...props }) => {
+                const imageName = [
+                    ...repoPath,
+                    options.imageName ?? "app-image",
+                ].join("/");
+                return (
+                    <BuildKitImage
+                        {...props}
+                        options={{ ...options, buildKitHost: process.env.BUILDKIT_HOST }}
+                        output={{
+                            ...options,
+                            type: "registry",
+                            registry,
+                            imageName,
+                        }}
+                    />
+                );
+            })}
         </Style>
     );
 };

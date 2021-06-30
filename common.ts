@@ -34,4 +34,4 @@ function setupGCloud(config: GCloudConfig) {
 }
 
 export const config = loadAdaptableConfig<Config>();
-setupGCloud(config.gcloud);
+if (config.gcloud) setupGCloud(config.gcloud);

@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-0.0.18.tgz#678629527220f876a885812756eaef4835ddaeff"
-  integrity sha512-3JN7XAwQiORSl+dubLtqz1omzJw4UtvYVbTx4nrTKFmDcLdX1LtMT7gCHhMkrWaIFXyUTCox7iBE1NATml2cKA==
+"@adaptable/client@0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-0.0.19.tgz#fdc4d91a1e7d986b5e92193d28de5b4d19ac3492"
+  integrity sha512-5/Y9jPx1H+0Td3Qwn1FSgrYKihyN+6W3XZM3gSQCozVvRi3uPizAsiIaKixK5JldJ6rtX3BOlqKBQAe7wzaOVQ==
   dependencies:
-    "@adaptable/utils" "0.0.18"
+    "@adaptable/utils" "0.0.19"
     "@adobe/node-fetch-retry" "^1.1.1"
     "@adpt/utils" "0.4.0-next.25"
     "@feathersjs/authentication-client" "^4.5.7"
@@ -18,19 +18,19 @@
     yup "^0.29.1"
     zod "^3.0.0-alpha.4"
 
-"@adaptable/cloud@^0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-0.0.18.tgz#a89038b016beb093ff3af3166feafc25558c2e89"
-  integrity sha512-75u9L04nedzvqMgao1tJsz8jGhGUAKuSpvShngy3sQ6FckZGub8QD9bJffUedyTF+9cidXpTx101L9fhYrtMvA==
+"@adaptable/cloud@^0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-0.0.19.tgz#2779fa02ad1d18eb89b0470e4a5d96947bee90aa"
+  integrity sha512-WCkxOQ4n3MuT7izoHGZYMA1J6JN7rxb/oeAnaB/iTtanqr/ANn6NAzDQfxGjIn66PUAhaOTi8mnu16iYs3Uwsw==
   dependencies:
-    "@adaptable/client" "0.0.18"
-    "@adaptable/utils" "0.0.18"
+    "@adaptable/client" "0.0.19"
+    "@adaptable/utils" "0.0.19"
     "@adpt/utils" "^0.4.0-next.25"
 
-"@adaptable/utils@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-0.0.18.tgz#788279382ae0ee06bb77ddadfbaf3c4629c469ed"
-  integrity sha512-oDfEGOkAKy7bdbK7kFs8qac/eDFhKJDlNDSanCS7gSBtxkdW7aXczK+nOi/+1r5x4MH5WWRRD5XK+BWUTYo6Zg==
+"@adaptable/utils@0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-0.0.19.tgz#5dd8104538ae0d951aa544d2dd1b1f81ce101d08"
+  integrity sha512-5BRvxE+b5NtyXYFiDhYpOO/MFwC/FiAQRdJNUn1xnlmH4741rGiPsgvdfhmYfHlThi7lm5BgdUXYS9d86TrZMw==
   dependencies:
     "@feathersjs/feathers" "^4.5.1"
 

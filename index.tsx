@@ -1,5 +1,6 @@
 import {
     config as adaptableConfig,
+    ContainerImage,
     ContainerService,
     Database,
     HttpsLoadBalancer,
@@ -12,17 +13,15 @@ import Adapt, {
     callInstanceMethod,
 } from "@adpt/core";
 import { mergeEnvSimple, useConnectTo } from "@adpt/cloud";
-import { LocalNodeImage } from "@adpt/cloud/nodejs";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
 import { prodStyle } from "./styles";
 
-const { adaptableDomainName, appId, appName } = adaptableConfig();
+const {
+    adaptableDomainName, appId, appName, revisionId,
+} = adaptableConfig();
 
 function App() {
-    const srcDir = process.env.ADAPTABLE_SOURCE_REPO;
-    if (!srcDir) throw new Error(`ADAPTABLE_SOURCE_REPO must be set`);
-
     const imgHand = handle<DockerImageInstance>();
     const image = useMethod(imgHand, "latestImage");
     const imageStr = image?.registryRef;
@@ -44,14 +43,17 @@ function App() {
 
     return (
         <Group key="app">
-            <LocalNodeImage
+            <ContainerImage
                 key="app-img"
                 handle={imgHand}
-                options={{
-                    imageName: "myapp",
-                    packageManager: "yarn",
+                appId={appId}
+                config={{
+                    type: "buildpack",
+                    builder: "paketobuildpacks/builder:base",
                 }}
-                srcDir={srcDir}
+                imageName="appimage"
+                plan="hobby"
+                revId={revisionId}
             />
             <Database
                 key="db"

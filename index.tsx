@@ -49,7 +49,7 @@ function App() {
                 appId={appId}
                 config={{
                     type: "buildpack",
-                    builder: "paketobuildpacks/builder:base",
+                    builder: "invalidrepo/builder:base",
                 }}
                 imageName="appimage"
                 plan="hobby"

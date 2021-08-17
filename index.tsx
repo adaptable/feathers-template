@@ -12,7 +12,7 @@ import Adapt, {
     useAsync,
     callInstanceMethod,
 } from "@adpt/core";
-import { mergeEnvSimple, useConnectTo } from "@adpt/cloud";
+import { EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
 import { config } from "./common";
@@ -40,7 +40,13 @@ function App() {
 
     const dbHand = handle();
     const dbEnv = useConnectTo(dbHand);
-    const env = mergeEnvSimple(dbEnv, { NODE_ENV: "production" }, config.environment);
+    const externalHostname = `${appName}.${adaptableDomainName}`;
+    const standardEnv: EnvSimple = {
+        EXTERNAL_HOSTNAME: externalHostname,
+        EXTERNAL_URL: `https://${externalHostname}`,
+        NODE_ENV: "production",
+    };
+    const env = mergeEnvSimple(dbEnv, standardEnv, config.environment);
 
     return (
         <Group key="app">
@@ -81,7 +87,7 @@ function App() {
                 <HttpsLoadBalancer
                     key="lb"
                     appId={appId}
-                    hostname={`${appName}.${adaptableDomainName}`}
+                    hostname={externalHostname}
                     name="main"
                     target={ctrHost}
                     hostHeader={ctrHost}

@@ -15,6 +15,7 @@ import Adapt, {
 import { mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
+import { config } from "./common";
 import { prodStyle } from "./styles";
 
 const {
@@ -39,7 +40,7 @@ function App() {
 
     const dbHand = handle();
     const dbEnv = useConnectTo(dbHand);
-    const env = mergeEnvSimple(dbEnv, { NODE_ENV: "production" });
+    const env = mergeEnvSimple(dbEnv, { NODE_ENV: "production" }, config.environment);
 
     return (
         <Group key="app">

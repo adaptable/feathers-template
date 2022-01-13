@@ -68,7 +68,7 @@ function App() {
                 appId={appId}
                 name="main"
                 plan="hobby"
-                type="mssql"
+                type={config.databaseType}
             />
             {imageStr && dbEnv ? (
                 <ContainerService

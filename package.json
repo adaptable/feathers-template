@@ -1,8 +1,8 @@
 {
-  "name": "cloud-run-with-sql",
-  "version": "0.0.2",
-  "description": "Adaptable Cloud Run with Cloud SQL template",
-  "author": "Manish Vachharajani <manishv@unbounded.systems>",
+  "name": "adaptable-feathersjs",
+  "version": "2.0.0",
+  "description": "Adaptable Deploy Template for Feathers.js and other Node.js projects",
+  "author": "Manish Vachharajani <manishv@adaptable.io>",
   "license": "BSD",
   "private": true,
   "dependencies": {

@@ -18,10 +18,10 @@
     yup "^0.29.1"
     zod "^3.11.6"
 
-"@adaptable/cloud@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.1.0.tgz#d91de8cdaf0fab1ed626c91128a574e0f40d5985"
-  integrity sha512-NJI9k5YnX+9QRetJviEr9M4jcIFxykhgSlbs6JuQHlxJ0Ra2vbmczQjTbGH6Ej44nPpy/y625ZWTrIVa0cxu0A==
+"@adaptable/cloud@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.1.1.tgz#7ee8af9cbe2971751395839b7818aeab0e5f1ba6"
+  integrity sha512-HyRYVcgwiThLTO3bP4j88QA6lcg1JzRnSLi+C8pdsfwrivV5pSAY+XY8TsWibrOclnQGcO30hCoLBvRwX+Jz5w==
   dependencies:
     "@adaptable/client" "1.1.0"
     "@adaptable/utils" "1.0.0"

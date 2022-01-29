@@ -1,0 +1,13 @@
+{
+  "name": "feathers-template-startup",
+  "version": "1.0.0",
+  "description": "Startup code for feathers template",
+  "main": "index.js",
+  "author": "Manish Vachharajani",
+  "license": "BSD",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@adaptable/client": "^1.1.0"
+  }
+}

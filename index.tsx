@@ -18,8 +18,11 @@ import { URL } from "url";
 import { config } from "./common";
 import { prodStyle } from "./styles";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { imageBuildProps } = require("./startup/buildInfo");
+
 const {
-    adaptableDomainName, appId, appName, revisionId,
+    adaptableDomainName, appId, appName,
 } = adaptableConfig();
 
 function App() {
@@ -53,14 +56,7 @@ function App() {
             <ContainerImage
                 key="app-img"
                 handle={imgHand}
-                appId={appId}
-                config={{
-                    type: "buildpack",
-                    builder: "paketobuildpacks/builder:full",
-                }}
-                imageName="appimage"
-                plan="hobby"
-                revId={revisionId}
+                {...imageBuildProps}
             />
             <Database
                 key="db"

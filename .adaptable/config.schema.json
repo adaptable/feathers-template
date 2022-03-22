@@ -13,6 +13,9 @@
         }
     },
     "properties": {
+        "buildEnvironment": {
+            "$ref": "#/definitions/environment"
+        },
         "environment": {
             "$ref": "#/definitions/environment"
         },

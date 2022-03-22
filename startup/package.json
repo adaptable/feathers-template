@@ -8,6 +8,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@adaptable/client": "^1.1.0"
+    "@adaptable/client": "^1.2.0"
   }
 }

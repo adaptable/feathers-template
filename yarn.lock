@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.1.0.tgz#e7aed572314b7bb787ec57237599f1f1d4766166"
-  integrity sha512-iKZzArJ8xF82j0vxjhcM5JIu7dh0VcV+Jcm4x7ylVu3aptjFRhu/1939eyfOq87D/9DjY4QYhWjXIQiEQO01Mg==
+"@adaptable/client@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.2.0.tgz#0f2567cb0f93bbc76f2ee647752dec7b233f4413"
+  integrity sha512-AJbucyPLhpp+bxuC2+9gjjSoh+eAhcaXf5sGXG7nMmAwihsa/6xPRc7bM1V5Z9ASkshryWIpOlnvW70OBN4lfg==
   dependencies:
-    "@adaptable/utils" "1.0.0"
+    "@adaptable/utils" "1.2.0"
     "@adobe/node-fetch-retry" "^1.1.1"
     "@adpt/utils" "0.4.0-next.25"
     "@feathersjs/authentication-client" "^4.5.7"
@@ -18,22 +18,32 @@
     yup "^0.29.1"
     zod "^3.11.6"
 
-"@adaptable/cloud@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.1.1.tgz#7ee8af9cbe2971751395839b7818aeab0e5f1ba6"
-  integrity sha512-HyRYVcgwiThLTO3bP4j88QA6lcg1JzRnSLi+C8pdsfwrivV5pSAY+XY8TsWibrOclnQGcO30hCoLBvRwX+Jz5w==
+"@adaptable/cloud@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.2.0.tgz#9d2b48da70a5defb87769b423c606b4284debac7"
+  integrity sha512-0Uk8PULQtEQZggxhpbIlVGNGMtHMCrjNaJAiprGtkJXIJzxUtExOUMsIH37G2hgUUiU6pzQ0xNY34Keek8EGDg==
   dependencies:
-    "@adaptable/client" "1.1.0"
-    "@adaptable/utils" "1.0.0"
+    "@adaptable/client" "1.2.0"
+    "@adaptable/utils" "1.2.0"
     "@adpt/utils" "^0.4.0-next.25"
     fast-deep-equal "^3.1.3"
     json-stable-stringify "^1.0.1"
     lodash "^4.17.21"
 
-"@adaptable/utils@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.0.0.tgz#02ccf6b28a37b3534f793dc2dfa0f1f3705340b0"
-  integrity sha512-LXVKeo5ier3zgPvmvYt8/jZmztVGCstlKoli9xv5FJEvLBwvFy9khcsg/MYCiMGqlyMpHCb+XaMNZs9Pu8vRoA==
+"@adaptable/template@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.2.0.tgz#889eb4c3206f8b84c4a4f8b923a35f94bbd70c18"
+  integrity sha512-jTxOp529d814XXvcAatpTBaFLGuVvOoGdwBA5tl35jVqr4bmQnDLMSbBUKvgacBvy59NhwzreKrFM0e3YB8QIQ==
+  dependencies:
+    ajv "^7.0.3"
+    dotenv "^8.2.0"
+    js-yaml "^3.14.0"
+    json5 "^2.1.3"
+
+"@adaptable/utils@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.2.0.tgz#7c632762eb1e9f3391984ba04b12b51c13a2cc8a"
+  integrity sha512-8gJkH1BMXQEHaJgGivfTD3Hm+FEkW6WbBXSa7TUAx1a4z66PUeD3hNHSGxVTq/8X6Pnu0pDyinONnSbZ+Q7nZA==
   dependencies:
     "@feathersjs/feathers" "^4.5.1"
 
@@ -333,11 +343,6 @@
   resolved "https://registry.yarnpkg.com/@types/jju/-/jju-1.4.1.tgz#0a39f5f8e84fec46150a7b9ca985c3f89ad98e9f"
   integrity sha512-LFt+YA7Lv2IZROMwokZKiPNORAV5N3huMs3IKnzlE430HWhWYZ8b+78HiwJXJJP1V2IEjinyJURuRJfGoaFSIA==
 
-"@types/js-yaml@^3.12.5":
-  version "3.12.5"
-  resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-3.12.5.tgz#136d5e6a57a931e1cce6f9d8126aa98a9c92a6bb"
-  integrity sha512-JCcp6J0GV66Y4ZMDAQCXot4xprYB+Zfd3meK9+INSJeVZwJmHAW30BBEEkPzXswMXuiyReUGOP3GxrADc9wPww==
-
 "@types/json-schema@^7.0.3":
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.6.tgz#f4c7ec43e81b319a9815115031709f26987891f0"
@@ -347,11 +352,6 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
-
-"@types/json5@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.30.tgz#44cb52f32a809734ca562e685c6473b5754a7818"
-  integrity sha512-sqm9g7mHlPY/43fcSNrCYfOeX9zkTTK+euO5E6+CVijSMm5tTjkVdwdqRkY3ljjIAf8679vps5jKUoJBCLsMDA==
 
 "@types/jsonwebtoken@^8.5.0":
   version "8.5.1"
@@ -497,10 +497,10 @@ ajv@^6.10.0, ajv@^6.10.2:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-7.0.1.tgz#d39ed49159672a91f796e2563e1e96984956e338"
-  integrity sha512-D2UYOXvDzGLVwld2/EyRu3xiJG885QUz2xS1phZzebYLPMPBFbPK4naXGDCtPltZoOG+I1+ZkNAJ65SJ3vqbsg==
+ajv@^7.0.3:
+  version "7.2.4"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-7.2.4.tgz#8e239d4d56cf884bccca8cca362f508446dc160f"
+  integrity sha512-nBeQgg/ZZA3u3SYxyaDvpvDtgZ/EZPF547ARgZBrG9Bhu1vKDwAIjtIf+sDtJUKa2zOcEbmRLBRSyMraS/Oy1A==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
@@ -1772,7 +1772,7 @@ js-yaml@3.14.0:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-js-yaml@^3.13.1, js-yaml@^3.14.0, js-yaml@^3.14.1:
+js-yaml@^3.13.1, js-yaml@^3.14.0:
   version "3.14.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.14.1.tgz#dae812fdb3825fa306609a8717383c50c36a0537"
   integrity sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==

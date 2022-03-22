@@ -6,7 +6,6 @@
   "author": "Manish Vachharajani",
   "license": "BSD",
   "private": true,
-  "type": "module",
   "dependencies": {
     "@adaptable/client": "^1.2.0"
   }

@@ -1,22 +1,6 @@
-import apiClient from "@adaptable/client";
-import { exit } from "process";
-
-const appId = process.env.ADAPTABLE_APP_ID;
-if (appId == null) throw new Error("No ADAPTABLE_APP_ID found");
-
-const revId = process.env.ADAPTABLE_APPREVISION_ID;
-if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
-
-const imageBuildProps = {
-    appId,
-    config: {
-        type: "buildpack",
-        builder: "paketobuildpacks/builder:full",
-    },
-    imageName: "appimage",
-    plan: "hobby",
-    revId,
-};
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { default: apiClient } = require("@adaptable/client");
+const { imageBuildProps } = require("./buildInfo");
 
 // This will initiate a build with the same parameters that adapt will use
 // When adapt sees the build already in progress, it will adopt the build
@@ -24,8 +8,8 @@ const imageBuildProps = {
 // However, the build will have started in parallel with the adapt startup
 // reducing the total time to app ready.
 async function doBuild(props) {
-    const client = await apiClient.default();
-    await client.service("builds").create(imageBuildProps);
+    const client = await apiClient();
+    await client.service("builds").create(props);
 }
 
 doBuild(imageBuildProps)

@@ -1,4 +1,12 @@
 // @ts-check
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const { loadAdaptableAppConfig } = require("@adaptable/template");
+
+/**
+ * @type {import("../common").Config}
+ */
+const appConfig = loadAdaptableAppConfig();
 
 const appId = process.env.ADAPTABLE_APP_ID;
 if (appId == null) throw new Error("No ADAPTABLE_APP_ID found");
@@ -18,6 +26,7 @@ const imageBuildProps = {
         type: "buildpack",
         builder: buildpackImage,
     },
+    env: appConfig.buildEnvironment,
     imageName: "appimage",
     plan: "hobby",
     revId,

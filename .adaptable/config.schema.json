@@ -16,11 +16,23 @@
         "buildEnvironment": {
             "$ref": "#/definitions/environment"
         },
+        "databaseType": {
+            "enum": ["mssql", "mongodb"]
+        },
         "environment": {
             "$ref": "#/definitions/environment"
         },
-        "databaseType": {
-            "enum": ["mssql", "mongodb"]
+        "nodeRunScripts": {
+            "type": "string"
+        },
+        "nodeStartScript": {
+            "enum": ["start"]
+        },
+        "nodeVersion": {
+            "enum": ["12", "14", "16"]
+        },
+        "projectPath": {
+            "type": "string"
         }
     },
     "required": ["databaseType"]

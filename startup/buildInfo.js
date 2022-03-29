@@ -14,8 +14,19 @@ if (appId == null) throw new Error("No ADAPTABLE_APP_ID found");
 const revId = process.env.ADAPTABLE_APPREVISION_ID;
 if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
 
+// IMPORTANT: Update config.schema.json when the buildpack image changes
+// major Node versions.
 const buildpackImage = "paketobuildpacks/builder:0.2.6-full";
 module.exports.buildpackImage = buildpackImage;
+
+const userEnv = appConfig.buildEnvironment || {};
+const env = {
+    BP_NODE_PROJECT_PATH: appConfig.projectPath,
+    BP_NODE_RUN_SCRIPTS: appConfig.nodeRunScripts,
+    BP_NODE_VERSION: appConfig.nodeVersion,
+    // User can override the top level settings
+    ...userEnv,
+};
 
 /**
  * @type {import("@adaptable/client/dist/api-types/builds").CreateBuild}
@@ -26,7 +37,7 @@ const imageBuildProps = {
         type: "buildpack",
         builder: buildpackImage,
     },
-    env: appConfig.buildEnvironment,
+    env,
     imageName: "appimage",
     plan: "hobby",
     revId,

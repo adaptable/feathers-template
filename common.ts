@@ -3,8 +3,12 @@ import { EnvSimple } from "@adpt/cloud";
 
 export interface Config {
     buildEnvironment?: EnvSimple;
-    environment?: EnvSimple;
     databaseType: "mongodb" | "mssql";
+    environment?: EnvSimple;
+    nodeRunScripts?: string;
+    nodeStartScript?: "start";
+    nodeVersion?: string;
+    projectPath?: string;
 }
 
 export const config = loadAdaptableAppConfig<Config>();

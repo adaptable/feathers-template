@@ -11,6 +11,7 @@ import Adapt, {
     useMethod,
     useAsync,
     callInstanceMethod,
+    useState,
 } from "@adpt/core";
 import { EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
@@ -26,6 +27,11 @@ function App() {
     const imgHand = handle<DockerImageInstance>();
     const image = useMethod(imgHand, "latestImage");
     const imageStr = image?.registryRef;
+    const [initialDatabaseType] = useState(config.databaseType);
+
+    if (config.databaseType !== initialDatabaseType) {
+        throw new Error(`databaseType cannot be changed from ${initialDatabaseType} to ${config.databaseType} without data loss.  Please restore the value of databaseType in the config or contact support for help.`);
+    }
 
     const ctrHand = handle();
     const ctrUrl = useAsync(

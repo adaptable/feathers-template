@@ -6,12 +6,13 @@ import {
     HttpsLoadBalancer,
 } from "@adaptable/cloud";
 import Adapt, {
-    Group,
     handle,
     useMethod,
     useAsync,
     callInstanceMethod,
     useState,
+    Sequence,
+    PrimitiveComponent,
 } from "@adpt/core";
 import { EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
@@ -25,6 +26,8 @@ const { imageBuildProps } = require("./startup/buildInfo");
 const {
     adaptableDomainName, appId, appName,
 } = adaptableConfig();
+
+class Empty extends PrimitiveComponent {}
 
 function App() {
     const imgHand = handle<DockerImageInstance>();
@@ -58,7 +61,7 @@ function App() {
     const env = mergeEnvSimple(dbEnv, standardEnv, config.environment);
 
     return (
-        <Group key="app">
+        <Sequence key="app">
             <ContainerImage
                 key="app-img"
                 handle={imgHand}
@@ -74,7 +77,7 @@ function App() {
             />
             {imageStr && dbEnv ? (
                 <ContainerService
-                    key="app"
+                    key="app-ctr"
                     handle={ctrHand}
                     appId={appId}
                     env={env}
@@ -83,8 +86,7 @@ function App() {
                     plan="hobby"
                     port={80}
                 />
-            ) : null}
-
+            ) : <Empty key="app-ctr-empty" />}
             {ctrHost ? (
                 <HttpsLoadBalancer
                     key="lb"
@@ -94,8 +96,8 @@ function App() {
                     target={ctrHost}
                     hostHeader={ctrHost}
                 />
-            ) : null}
-        </Group>
+            ) : <Empty key="lb-empty" />}
+        </Sequence>
     );
 }
 

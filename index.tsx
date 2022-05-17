@@ -7,12 +7,10 @@ import {
 } from "@adaptable/cloud";
 import Adapt, {
     handle,
-    useMethod,
     useAsync,
     callInstanceMethod,
     useState,
     Sequence,
-    PrimitiveComponent,
 } from "@adpt/core";
 import { EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
@@ -27,12 +25,21 @@ const {
     adaptableDomainName, appId, appName,
 } = adaptableConfig();
 
-class Empty extends PrimitiveComponent {}
+const computeRegistryRef = (imageName: string) => {
+    const revNumber = process.env.ADAPTABLE_APPREVISION_NUMBER;
+    const dockerRepo = process.env.ADAPTABLE_DOCKER_REPO;
+    return `${dockerRepo}/${imageName}:${revNumber}`;
+};
 
 function App() {
     const imgHand = handle<DockerImageInstance>();
-    const image = useMethod(imgHand, "latestImage");
-    const imageStr = image?.registryRef;
+    // Workaround state update issue when Container is errored out
+    // Instead of the logic below, that requires a state loop turn
+    // just calculate what the image name directly.
+    //
+    // const image = useMethod(imgHand, "latestImage");
+    // const imageStr = image?.registryRef;
+    const imageStr = computeRegistryRef(imageBuildProps.imageName);
     const [initialDatabaseType] = useState(config.databaseType);
 
     if (config.databaseType !== initialDatabaseType) {
@@ -86,7 +93,7 @@ function App() {
                     plan="hobby"
                     port={80}
                 />
-            ) : <Empty key="app-ctr-empty" />}
+            ) : null}
             {ctrHost ? (
                 <HttpsLoadBalancer
                     key="lb"
@@ -96,7 +103,7 @@ function App() {
                     target={ctrHost}
                     hostHeader={ctrHost}
                 />
-            ) : <Empty key="lb-empty" />}
+            ) : null}
         </Sequence>
     );
 }

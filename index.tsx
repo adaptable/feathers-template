@@ -15,6 +15,7 @@ import Adapt, {
 import { EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
+import { inspect } from "util";
 import { config } from "./common";
 import { prodStyle } from "./styles";
 
@@ -41,6 +42,11 @@ function App() {
     // const imageStr = image?.registryRef;
     const imageStr = computeRegistryRef(imageBuildProps.imageName);
     const [initialDatabaseType] = useState(config.databaseType);
+
+    // Debug code for an error seen only once in system testing
+    if (typeof initialDatabaseType !== "string") {
+        throw new Error(`InternalError: initialDatabaseType was not a string, got ${inspect(initialDatabaseType, false, null)}, config.databaseType is ${inspect(config.databaseType, false, null)}`);
+    }
 
     if (config.databaseType !== initialDatabaseType) {
         throw new Error(`databaseType cannot be changed from ${initialDatabaseType} to ${config.databaseType} without data loss.  Please restore the value of databaseType in the config or contact support for help.`);

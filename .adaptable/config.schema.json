@@ -17,7 +17,7 @@
             "$ref": "#/definitions/environment"
         },
         "databaseType": {
-            "enum": ["mssql", "mongodb"]
+            "enum": ["mssql", "mongodb", "postgres"]
         },
         "environment": {
             "$ref": "#/definitions/environment"

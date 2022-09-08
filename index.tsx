@@ -70,6 +70,9 @@ function App() {
         EXTERNAL_HOSTNAME: externalHostname,
         EXTERNAL_URL: `https://${externalHostname}`,
         NODE_ENV: "production",
+        // The load balancer + container service architecture has
+        // two reverse proxies.
+        ADAPTABLE_TRUST_PROXY_DEPTH: "2",
     };
     const env = mergeEnvSimple(dbEnv, standardEnv, config.environment);
 

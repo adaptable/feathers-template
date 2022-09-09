@@ -9,6 +9,7 @@ export interface Config {
     nodeStartScript?: "start";
     nodeVersion?: string;
     projectPath?: string;
+    pythonVersion?: string;
 }
 
 export const config = loadAdaptableAppConfig<Config>();

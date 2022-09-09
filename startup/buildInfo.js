@@ -24,6 +24,7 @@ const env = {
     BP_NODE_PROJECT_PATH: appConfig.projectPath,
     BP_NODE_RUN_SCRIPTS: appConfig.nodeRunScripts,
     BP_NODE_VERSION: appConfig.nodeVersion,
+    BP_CPYTHON_VERSION: appConfig.pythonVersion,
     // User can override the top level settings
     ...userEnv,
 };

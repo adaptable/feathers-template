@@ -23,6 +23,8 @@ module.exports.buildpackImage = buildpackImage;
 
 const userEnv = appConfig.buildEnvironment || {};
 const env = {
+    // BP_LAUNCH_COMMAND is a JSON-format string
+    BP_LAUNCH_COMMAND: JSON.stringify(appConfig.startCommand),
     BP_NODE_PROJECT_PATH: appConfig.projectPath,
     BP_NODE_RUN_SCRIPTS: appConfig.nodeRunScripts,
     BP_NODE_VERSION: appConfig.nodeVersion,
@@ -46,3 +48,11 @@ const imageBuildProps = {
     revId,
 };
 module.exports.imageBuildProps = imageBuildProps;
+
+if (tags.includes("python")) {
+    imageBuildProps.config.buildpacks = [
+        "paketo-buildpacks/python",
+        // buildpack-launch is required for BP_LAUNCH_COMMAND
+        "adaptable/buildpack-launch:0.0.7",
+    ];
+}

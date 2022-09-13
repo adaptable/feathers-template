@@ -10,6 +10,7 @@ export interface Config {
     nodeVersion?: string;
     projectPath?: string;
     pythonVersion?: string;
+    startCommand?: string;
 }
 
 export const config = loadAdaptableAppConfig<Config>();

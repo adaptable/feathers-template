@@ -23,22 +23,28 @@
             "$ref": "#/definitions/environment"
         },
         "nodeRunScripts": {
-            "type": "string"
+            "type": "string",
+            "tags": ["nodejs"]
         },
         "nodeStartScript": {
-            "enum": ["start"]
+            "enum": ["start"],
+            "tags": ["nodejs"]
         },
         "nodeVersion": {
-            "enum": ["12", "14", "16"]
+            "enum": ["12", "14", "16"],
+            "tags": ["nodejs"]
         },
         "projectPath": {
-            "type": "string"
+            "type": "string",
+            "tags": ["nodejs"]
         },
         "pythonVersion": {
-            "enum": ["3.6", "3.7", "3.8", "3.9"]
+            "enum": ["3.6", "3.7", "3.8", "3.9"],
+            "tags": ["python"]
         },
         "startCommand": {
-            "type": "string"
+            "type": "string",
+            "tags": ["python"]
         }
     },
     "required": ["databaseType"]

@@ -14,6 +14,8 @@ if (appId == null) throw new Error("No ADAPTABLE_APP_ID found");
 const revId = process.env.ADAPTABLE_APPREVISION_ID;
 if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
 
+const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
+
 // IMPORTANT: Update config.schema.json when the buildpack image changes
 // major Node versions.
 const buildpackImage = "paketobuildpacks/builder:0.2.6-full";

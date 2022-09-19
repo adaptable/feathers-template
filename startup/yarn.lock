@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.7.0.tgz#6c32897f848efc23839d0a31aaa6a0a7253e56d4"
-  integrity sha512-L8ikelUYENzvDUDYl8Z71chP+x3ZmUlWkcHhKlqVQY54zJ1yS0ccOlgD2b12Td4VAnEfyIgPFDwLKy2LfP9XJw==
+"@adaptable/client@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.10.0.tgz#41157703f56c69877863cc1a36f70a8df4884f1a"
+  integrity sha512-UtWlsmfdpE8iXBHvuVJ7FODWPHPQ5ttDE60ExKkPWcct8L+KnBCZ5D6b8HyEH7+RV+IeWI4Yr73GRhlQpC6ycA==
   dependencies:
-    "@adaptable/utils" "1.7.0"
+    "@adaptable/utils" "1.10.0"
     "@adobe/node-fetch-retry" "^1.1.1"
     "@adpt/utils" "0.4.0-next.25"
     "@feathersjs/authentication-client" "^4.5.7"
@@ -18,22 +18,23 @@
     yup "^0.29.1"
     zod "^3.17.9"
 
-"@adaptable/template@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.2.0.tgz#889eb4c3206f8b84c4a4f8b923a35f94bbd70c18"
-  integrity sha512-jTxOp529d814XXvcAatpTBaFLGuVvOoGdwBA5tl35jVqr4bmQnDLMSbBUKvgacBvy59NhwzreKrFM0e3YB8QIQ==
+"@adaptable/template@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.10.0.tgz#92a80ebc7bac287262eade8f8fc7b0f67390a782"
+  integrity sha512-L4jKCLve7F/4yDkWZXtiliPogh4T1KxaMZ/cgVkTYODxrbmaxWv/RbzZdirSb3vpH5YOH0M/K5XMRwBr4u1/rQ==
   dependencies:
-    ajv "^7.0.3"
+    "@adaptable/utils" "1.10.0"
     dotenv "^8.2.0"
     js-yaml "^3.14.0"
     json5 "^2.1.3"
 
-"@adaptable/utils@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.7.0.tgz#40781bf007e25569283adf15918c98f6e50c36d7"
-  integrity sha512-+pSxvFA9ePb1Gnj0so3vEfsRbSA9aJees6ELMbnKCc9ebAa/Vhj+bu4T74a9Ktx0Ktt7pAtAnRIb8PYcwKGcDg==
+"@adaptable/utils@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.10.0.tgz#c9c7d645fc0572df6dd91ccf9d3cffd591d2e951"
+  integrity sha512-yRv4BX4vKxjMGAZZdTs07dYLGdIQyYvqhUaYRhRrX7jKXsgVB5kV712H0UZI2EQa80w+4jwB1qDIV6+6cZh/0Q==
   dependencies:
     "@feathersjs/feathers" "^4.5.1"
+    ajv "^7.0.3"
 
 "@adobe/node-fetch-retry@^1.1.1":
   version "1.1.3"

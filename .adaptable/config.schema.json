@@ -31,7 +31,7 @@
             "tags": ["nodejs"]
         },
         "nodeVersion": {
-            "enum": ["12", "14", "16"],
+            "enum": ["12", "14", "16", "18"],
             "tags": ["nodejs"]
         },
         "projectPath": {
@@ -39,7 +39,7 @@
             "tags": ["nodejs"]
         },
         "pythonVersion": {
-            "enum": ["3.6", "3.7", "3.8", "3.9"],
+            "enum": ["3.6", "3.7", "3.8", "3.9", "3.10"],
             "tags": ["python"]
         },
         "startCommand": {

@@ -17,9 +17,8 @@ if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
 const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
 
 // IMPORTANT: Update config.schema.json when the buildpack image changes
-// major Node versions.
-const buildpackImage = "paketobuildpacks/builder:0.2.6-full";
-module.exports.buildpackImage = buildpackImage;
+// Node/Python versions.
+const defaultBuilderImage = "paketobuildpacks/builder:0.2.182-full";
 
 const userEnv = appConfig.buildEnvironment || {};
 const env = {
@@ -40,7 +39,7 @@ const imageBuildProps = {
     appId,
     config: {
         type: "buildpack",
-        builder: buildpackImage,
+        builder: defaultBuilderImage,
     },
     env,
     imageName: "appimage",
@@ -50,6 +49,10 @@ const imageBuildProps = {
 module.exports.imageBuildProps = imageBuildProps;
 
 if (tags.includes("python")) {
+    if (appConfig.pythonVersion === "3.6") {
+        imageBuildProps.config.builder = "paketobuildpacks/builder:0.2.6-full";
+    }
+
     imageBuildProps.config.buildpacks = [
         "paketo-buildpacks/python",
         // buildpack-launch is required for BP_LAUNCH_COMMAND

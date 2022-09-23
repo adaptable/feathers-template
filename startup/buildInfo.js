@@ -48,6 +48,12 @@ const imageBuildProps = {
 };
 module.exports.imageBuildProps = imageBuildProps;
 
+if (tags.includes("nodejs")) {
+    imageBuildProps.config.buildpacks = [
+        "paketo-buildpacks/nodejs",
+    ];
+}
+
 if (tags.includes("python")) {
     if (appConfig.pythonVersion === "3.6") {
         imageBuildProps.config.builder = "paketobuildpacks/builder:0.2.6-full";

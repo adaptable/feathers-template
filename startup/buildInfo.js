@@ -49,10 +49,21 @@ const imageBuildProps = {
 };
 module.exports.imageBuildProps = imageBuildProps;
 
+// This works around the following issues:
+//   https://github.com/paketo-buildpacks/python-start/issues/196
+//   https://github.com/paketo-buildpacks/python-start/pull/128
+// When we update to a version that has both of these fixes integrated,
+// this workaround can be removed.
+const pythonWorkaround = `#!/bin/sh
+
+touch __adaptable.py
+`;
+
 if (tags.includes("python")) {
     imageBuildProps.config.buildpacks = [
         "paketo-buildpacks/python",
         // buildpack-launch is required for BP_LAUNCH_COMMAND
         "adaptable/buildpack-launch:0.0.7",
     ];
+    imageBuildProps.config.preBuildScript = pythonWorkaround;
 }

@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.10.0.tgz#41157703f56c69877863cc1a36f70a8df4884f1a"
-  integrity sha512-UtWlsmfdpE8iXBHvuVJ7FODWPHPQ5ttDE60ExKkPWcct8L+KnBCZ5D6b8HyEH7+RV+IeWI4Yr73GRhlQpC6ycA==
+"@adaptable/client@^1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.12.0.tgz#5287656e2a58a7dcd54daed4d7abb98cca3490f8"
+  integrity sha512-eJkRxsqlcv2LAEnlrTbePiJPktaW62A0lgBzh1xcpPKv5dtBmDus3YuCSqqRYOzlC+e6oA/QsOF+fF+9Intbhg==
   dependencies:
-    "@adaptable/utils" "1.10.0"
+    "@adaptable/utils" "1.11.0"
     "@adobe/node-fetch-retry" "^1.1.1"
     "@adpt/utils" "0.4.0-next.25"
     "@feathersjs/authentication-client" "^4.5.7"
@@ -18,20 +18,20 @@
     yup "^0.29.1"
     zod "^3.17.9"
 
-"@adaptable/template@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.10.0.tgz#92a80ebc7bac287262eade8f8fc7b0f67390a782"
-  integrity sha512-L4jKCLve7F/4yDkWZXtiliPogh4T1KxaMZ/cgVkTYODxrbmaxWv/RbzZdirSb3vpH5YOH0M/K5XMRwBr4u1/rQ==
+"@adaptable/template@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.11.0.tgz#34ad1c82e2c87a9045b8c3cce3a47b6d68438556"
+  integrity sha512-oeZuxOfnBVFKCFwVmjuYpYjIfvYu/QfF8mCyQhcRYrrDg6zalkBgV+RH+bt49Tsq8P4k1xDrpTLb6L7LkCurvg==
   dependencies:
-    "@adaptable/utils" "1.10.0"
+    "@adaptable/utils" "1.11.0"
     dotenv "^8.2.0"
     js-yaml "^3.14.0"
     json5 "^2.1.3"
 
-"@adaptable/utils@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.10.0.tgz#c9c7d645fc0572df6dd91ccf9d3cffd591d2e951"
-  integrity sha512-yRv4BX4vKxjMGAZZdTs07dYLGdIQyYvqhUaYRhRrX7jKXsgVB5kV712H0UZI2EQa80w+4jwB1qDIV6+6cZh/0Q==
+"@adaptable/utils@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.11.0.tgz#23a1aa5dee0cd819e3ae4a37650c0f3eb4d46754"
+  integrity sha512-Wml2gxmTJq6v/+Sgi+4BcPI9eS5A7TQLHsBGSQC/X84nIubpVGzZ3SpppkX+xi9vMvJst5W7a1O97jG+4BaMLA==
   dependencies:
     "@feathersjs/feathers" "^4.5.1"
     ajv "^7.0.3"

@@ -3,7 +3,7 @@ import { EnvSimple } from "@adpt/cloud";
 
 export interface Config {
     buildEnvironment?: EnvSimple;
-    databaseType: "mongodb" | "mssql";
+    databaseType: "mongodb" | "mssql" | "none" | "postgres";
     environment?: EnvSimple;
     nodeRunScripts?: string;
     nodeStartScript?: "start";

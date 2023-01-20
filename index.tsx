@@ -11,8 +11,9 @@ import Adapt, {
     callInstanceMethod,
     useState,
     Sequence,
+    useImperativeMethods,
 } from "@adpt/core";
-import { EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
+import { ConnectToInstance, EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
 import { inspect } from "util";
@@ -31,6 +32,15 @@ const computeRegistryRef = (imageName: string) => {
     const dockerRepo = process.env.ADAPTABLE_DOCKER_REPO;
     return `${dockerRepo}/${imageName}:${revNumber}`;
 };
+
+function NoDatabase() {
+    useImperativeMethods<ConnectToInstance>(() => ({
+        connectEnv: () => ({
+            NO_DATABASE: "true",
+        }),
+    }));
+    return null;
+}
 
 function App() {
     const imgHand = handle<DockerImageInstance>();
@@ -83,14 +93,18 @@ function App() {
                 handle={imgHand}
                 {...imageBuildProps}
             />
-            <Database
-                key="db"
-                handle={dbHand}
-                appId={appId}
-                name="main"
-                plan="hobby"
-                type={config.databaseType}
-            />
+            {config.databaseType === "none"
+                ? (<NoDatabase key="no-db" handle={dbHand} />)
+                : (
+                    <Database
+                        key="db"
+                        handle={dbHand}
+                        appId={appId}
+                        name="main"
+                        plan="hobby"
+                        type={config.databaseType}
+                    />
+                ) }
             {imageStr && dbEnv ? (
                 <ContainerService
                     key="app-ctr"

@@ -3,21 +3,24 @@ import {
     ContainerImage,
     ContainerService,
     Database,
+    Domain,
     HttpsLoadBalancer,
 } from "@adaptable/cloud";
 import Adapt, {
-    handle,
-    useAsync,
     callInstanceMethod,
-    useState,
+    Group,
+    handle,
     Sequence,
+    useAsync,
     useImperativeMethods,
+    useState,
 } from "@adpt/core";
 import { ConnectToInstance, EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
+import { sha256hex } from "@adpt/utils";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
 import { inspect } from "util";
-import { config } from "./common";
+import { config, ConfigDomains } from "./common";
 import { prodStyle } from "./styles";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -40,6 +43,43 @@ function NoDatabase() {
         }),
     }));
     return null;
+}
+
+function makeDomainName(s: string) {
+    const subs = s.replace(/[^A-Za-z0-9-]/g, "-").slice(0,48);
+    const hash = sha256hex(s).slice(0, 6);
+    return `${subs}-${hash}`;
+}
+
+export interface DomainsFromConfigProps {
+    domains?: ConfigDomains;
+    defaultEndpoint?: string;
+    endpoints?: { [ep: string]: { lbId: string | undefined } };
+}
+
+export function DomainsFromConfig({ domains, endpoints: epsIn, defaultEndpoint }: DomainsFromConfigProps) {
+    if (domains == null) return null;
+    const endpoints = epsIn ?? {};
+    return (<Group key="domains">
+        {domains.map((d) => {
+            const ep = d.endpoint ?? defaultEndpoint;
+            if (ep == null) throw new Error(`Domain configuration ${d} must specify endpoint`);
+            const epInfo = endpoints[ep];
+            if (d.endpoint != null && epInfo == null) throw new Error(`Cannot find endpoint ${ep} for domain ${d}`);
+            if (epInfo == null) throw new Error(`No information for default endpoint ${ep} in endpoints ${endpoints}`);
+            const { lbId } = epInfo;
+            if (lbId == null) return null;
+            return (
+                <Domain
+                    key={d.domainName}
+                    appId={appId}
+                    name={d.name ?? makeDomainName(d.domainName)}
+                    domainName={d.domainName}
+                    lbId={lbId}
+                />
+            );
+        })}
+    </Group>);
 }
 
 function App() {
@@ -86,6 +126,12 @@ function App() {
     };
     const env = mergeEnvSimple(dbEnv, standardEnv, config.environment);
 
+    const lbHand = handle<HttpsLoadBalancer>();
+    const lbId: string | undefined = useAsync(
+        () => callInstanceMethod<string | undefined>(lbHand, undefined, "id"),
+        undefined,
+    );
+
     return (
         <Sequence key="app">
             <ContainerImage
@@ -120,6 +166,7 @@ function App() {
             {ctrHost ? (
                 <HttpsLoadBalancer
                     key="lb"
+                    handle={lbHand}
                     appId={appId}
                     hostname={externalHostname}
                     name="main"
@@ -127,6 +174,11 @@ function App() {
                     hostHeader={ctrHost}
                 />
             ) : null}
+            <DomainsFromConfig
+                domains={config.domains}
+                defaultEndpoint="main"
+                endpoints={{ "main": { lbId: lbId } }}
+            />
         </Sequence>
     );
 }

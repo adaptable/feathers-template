@@ -10,6 +10,29 @@
                 }
             },
             "additionalProperties": false
+        },
+        "domain": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "pattern": "[A-Za-z][A-Za-z0-9-]*"
+                },
+                "domainName": {
+                    "type": "string",
+                    "format": "hostname"
+                },
+                "endpoint": {
+                    "enum": ["main"]
+                }
+            },
+            "required": ["domainName"]
+        },
+        "domains": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/domain"
+            }
         }
     },
     "properties": {
@@ -18,6 +41,9 @@
         },
         "databaseType": {
             "enum": ["mssql", "mongodb", "none", "postgres"]
+        },
+        "domains": {
+            "$ref": "#/definitions/domains"
         },
         "environment": {
             "$ref": "#/definitions/environment"

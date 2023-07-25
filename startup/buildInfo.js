@@ -17,9 +17,9 @@ if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
 const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
 
 // IMPORTANT: Update config.schema.json when the buildpack image changes
-// major Node versions.
-const buildpackImage = "paketobuildpacks/builder:0.2.6-full";
-module.exports.buildpackImage = buildpackImage;
+// Node/Python versions.
+const defaultBuilderImage = "paketobuildpacks/builder:0.2.443-full";
+const oldBuilderImage = "paketobuildpacks/builder:0.2.6-full";
 
 const userEnv = appConfig.buildEnvironment || {};
 const env = {
@@ -40,7 +40,7 @@ const imageBuildProps = {
     appId,
     config: {
         type: "buildpack",
-        builder: buildpackImage,
+        builder: defaultBuilderImage,
     },
     env,
     imageName: "appimage",
@@ -59,11 +59,27 @@ const pythonWorkaround = `#!/bin/sh
 touch __adaptable.py
 `;
 
-if (tags.includes("python")) {
+if (tags.includes("nodejs")) {
+    // Use the older builder for versions < 18
+    if (["12", "14", "16"].includes(appConfig.nodeVersion || "")) {
+        imageBuildProps.config.builder = oldBuilderImage;
+    }
+
+    imageBuildProps.config.buildpacks = [
+        "paketo-buildpacks/nodejs",
+    ];
+} else if (tags.includes("python")) {
+    // Use the older builder for versions < 3.10
+    if (["3.6", "3.7", "3.8", "3.9"].includes(appConfig.pythonVersion || "")) {
+        imageBuildProps.config.builder = oldBuilderImage;
+
+        // Workaround is only required for the older builder
+        imageBuildProps.config.preBuildScript = pythonWorkaround;
+    }
+
     imageBuildProps.config.buildpacks = [
         "paketo-buildpacks/python",
         // buildpack-launch is required for BP_LAUNCH_COMMAND
         "adaptable/buildpack-launch:0.0.7",
     ];
-    imageBuildProps.config.preBuildScript = pythonWorkaround;
 }

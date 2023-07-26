@@ -26,7 +26,10 @@ const env = {
     // BP_LAUNCH_COMMAND is a JSON-format string
     BP_LAUNCH_COMMAND: JSON.stringify(appConfig.startCommand),
     BP_NODE_PROJECT_PATH: appConfig.projectPath,
-    BP_NODE_RUN_SCRIPTS: appConfig.nodeRunScripts,
+    // The default in newer buildpacks is to run the "build" script if
+    // BP_NODE_RUN_SCRIPTS is not set. We want to disable that default, so
+    // set to empty string when nodeRunScripts is falsey.
+    BP_NODE_RUN_SCRIPTS: appConfig.nodeRunScripts || "",
     BP_NODE_VERSION: appConfig.nodeVersion,
     BP_CPYTHON_VERSION: appConfig.pythonVersion,
     // User can override the top level settings

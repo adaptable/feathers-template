@@ -70,6 +70,8 @@ if (tags.includes("nodejs")) {
 
     imageBuildProps.config.buildpacks = [
         "paketo-buildpacks/nodejs",
+        // buildpack-launch is required for BP_LAUNCH_COMMAND
+        "adaptable/buildpack-launch:0.0.7",
     ];
 } else if (tags.includes("python")) {
     // Use the older builder for versions < 3.10

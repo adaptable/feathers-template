@@ -70,7 +70,7 @@
         },
         "startCommand": {
             "type": "string",
-            "tags": ["python"]
+            "tags": ["python", "nodejs"]
         }
     },
     "required": ["databaseType"]

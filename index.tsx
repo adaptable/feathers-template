@@ -15,7 +15,9 @@ import Adapt, {
     useImperativeMethods,
     useState,
 } from "@adpt/core";
-import { ConnectToInstance, EnvSimple, mergeEnvSimple, useConnectTo } from "@adpt/cloud";
+import {
+    ConnectToInstance, EnvSimple, mergeEnvSimple, useConnectTo,
+} from "@adpt/cloud";
 import { sha256hex } from "@adpt/utils";
 import { DockerImageInstance } from "@adpt/cloud/docker";
 import { URL } from "url";
@@ -45,8 +47,23 @@ function NoDatabase() {
     return null;
 }
 
+function parsePort(port: string) {
+    const m = /^\s*(\d+)\s*$/.exec(port);
+    if (m) {
+        const p = parseInt(m[1], 10);
+        if (!Number.isNaN(p) && p > 0 && p < 65536) {
+            return p;
+        }
+    }
+
+    const msg = `Invalid value '${port}' for PORT in Runtime Environment`;
+    // eslint-disable-next-line no-console
+    console.log(`\n\nERROR: ${msg}\n`);
+    throw new Error(msg);
+}
+
 function makeDomainName(s: string) {
-    const subs = s.replace(/[^A-Za-z0-9-]/g, "-").slice(0,48);
+    const subs = s.replace(/[^A-Za-z0-9-]/g, "-").slice(0, 48);
     const hash = sha256hex(s).slice(0, 6);
     return `${subs}-${hash}`;
 }
@@ -57,29 +74,33 @@ export interface DomainsFromConfigProps {
     endpoints?: { [ep: string]: { lbId: string | undefined } };
 }
 
-export function DomainsFromConfig({ domains, endpoints: epsIn, defaultEndpoint }: DomainsFromConfigProps) {
+export function DomainsFromConfig(
+    { domains, endpoints: epsIn, defaultEndpoint }: DomainsFromConfigProps,
+) {
     if (domains == null) return null;
     const endpoints = epsIn ?? {};
-    return (<Group key="domains">
-        {domains.map((d) => {
-            const ep = d.endpoint ?? defaultEndpoint;
-            if (ep == null) throw new Error(`Domain configuration ${d} must specify endpoint`);
-            const epInfo = endpoints[ep];
-            if (d.endpoint != null && epInfo == null) throw new Error(`Cannot find endpoint ${ep} for domain ${d}`);
-            if (epInfo == null) throw new Error(`No information for default endpoint ${ep} in endpoints ${endpoints}`);
-            const { lbId } = epInfo;
-            if (lbId == null) return null;
-            return (
-                <Domain
-                    key={d.domainName}
-                    appId={appId}
-                    name={d.name ?? makeDomainName(d.domainName)}
-                    domainName={d.domainName}
-                    lbId={lbId}
-                />
-            );
-        })}
-    </Group>);
+    return (
+        <Group key="domains">
+            {domains.map((d) => {
+                const ep = d.endpoint ?? defaultEndpoint;
+                if (ep == null) throw new Error(`Domain configuration ${d} must specify endpoint`);
+                const epInfo = endpoints[ep];
+                if (d.endpoint != null && epInfo == null) throw new Error(`Cannot find endpoint ${ep} for domain ${d}`);
+                if (epInfo == null) throw new Error(`No information for default endpoint ${ep} in endpoints ${endpoints}`);
+                const { lbId } = epInfo;
+                if (lbId == null) return null;
+                return (
+                    <Domain
+                        key={d.domainName}
+                        appId={appId}
+                        name={d.name ?? makeDomainName(d.domainName)}
+                        domainName={d.domainName}
+                        lbId={lbId}
+                    />
+                );
+            })}
+        </Group>
+    );
 }
 
 function App() {
@@ -124,7 +145,10 @@ function App() {
         // two reverse proxies.
         ADAPTABLE_TRUST_PROXY_DEPTH: "2",
     };
-    const env = mergeEnvSimple(dbEnv, standardEnv, config.environment);
+
+    // Remove PORT from the container environment
+    const { PORT, ...env } = mergeEnvSimple(dbEnv, standardEnv, config.environment) || {};
+    const port = PORT ? parsePort(PORT) : 80;
 
     const lbHand = handle<HttpsLoadBalancer>();
     const lbId: string | undefined = useAsync(
@@ -160,7 +184,7 @@ function App() {
                     image={imageStr}
                     name="app"
                     plan="hobby"
-                    port={80}
+                    port={port}
                 />
             ) : null}
             {ctrHost ? (
@@ -177,7 +201,7 @@ function App() {
             <DomainsFromConfig
                 domains={config.domains}
                 defaultEndpoint="main"
-                endpoints={{ "main": { lbId: lbId } }}
+                endpoints={{ main: { lbId } }}
             />
         </Sequence>
     );

@@ -22,6 +22,9 @@ const defaultBuilderImage = "paketobuildpacks/builder:0.2.443-full";
 const oldBuilderImage = "paketobuildpacks/builder:0.2.6-full";
 
 const userEnv = appConfig.buildEnvironment || {};
+/**
+ * @type Record<string, string | undefined>
+ */
 const env = {
     // BP_LAUNCH_COMMAND is a JSON-format string
     BP_LAUNCH_COMMAND: JSON.stringify(appConfig.startCommand),
@@ -66,6 +69,9 @@ if (tags.includes("nodejs")) {
     // Use the older builder for versions < 18
     if (["12", "14", "16"].includes(appConfig.nodeVersion || "")) {
         imageBuildProps.config.builder = oldBuilderImage;
+
+        // Older builder errors if BP_NODE_RUN_SCRIPTS is the empty string
+        if (!env.BP_NODE_RUN_SCRIPTS) delete env.BP_NODE_RUN_SCRIPTS;
     }
 
     imageBuildProps.config.buildpacks = [

@@ -36,8 +36,15 @@
         }
     },
     "properties": {
+        "buildCommand": {
+            "type": "string",
+            "tags": ["go"]
+        },
         "buildEnvironment": {
             "$ref": "#/definitions/environment"
+        },
+        "builderType": {
+            "enum": ["paketo", "nixpacks"]
         },
         "databaseType": {
             "enum": ["mssql", "mongodb", "none", "postgres"]
@@ -47,6 +54,10 @@
         },
         "environment": {
             "$ref": "#/definitions/environment"
+        },
+        "installCommand": {
+            "type": "string",
+            "tags": ["go"]
         },
         "nodeRunScripts": {
             "type": "string",
@@ -68,9 +79,11 @@
             "enum": ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"],
             "tags": ["python"]
         },
+        "repoSubdir": {
+            "type": "string"
+        },
         "startCommand": {
-            "type": "string",
-            "tags": ["python", "nodejs"]
+            "type": "string"
         }
     },
     "required": ["databaseType"]

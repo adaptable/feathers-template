@@ -26,10 +26,12 @@ const nixpacksVersion = "1.18.0";
 
 const userEnv = appConfig.buildEnvironment || {};
 
-if (tags.includes("go")) {
+if (tags.includes("go") || tags.includes("php")) {
     if (builderType === "paketo") {
-        console.log(`Golang not currently supported with paketo builderType`);
-        throw new Error(`Golang not currently supported with paketo builderType`);
+        const msg = `${tags.join("+")} not currently supported with paketo builderType. Use nixpacks instead.`;
+        // eslint-disable-next-line no-console
+        console.log(msg);
+        throw new Error(msg);
     }
     builderType = "nixpacks";
 } else if (!builderType) {
@@ -118,11 +120,19 @@ if (builderType === "paketo") {
     if (tags.includes("nodejs")) providers = ["node"];
     else if (tags.includes("python")) providers = ["python"];
     else if (tags.includes("go")) providers = ["go"];
+    else if (tags.includes("php")) providers = ["php"];
+
+    if (tags.includes("php") && !appConfig.startCommand) {
+        // This is the same command as nixpacks generates except it uses
+        // php-fpm -D instead of backgrounding via shell ("&"). This allows
+        // php-fpm to start and background itself so that it is ready to
+        // accept connections when nginx is started.
+        appConfig.startCommand = "perl /assets/prestart.pl /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)";
+    }
 
     const setIfDefined = {
         NIXPACKS_NODE_VERSION: appConfig.nodeVersion,
         NIXPACKS_PYTHON_VERSION: appConfig.pythonVersion,
-        NIXPACKS_START_CMD: appConfig.startCommand,
     };
 
     const variables = {};
@@ -162,6 +172,12 @@ if (builderType === "paketo") {
     }
 
     if (Object.keys(plan.phases).length === 0) delete plan.phases;
+
+    if (appConfig.startCommand) {
+        plan.start = {
+            cmd: appConfig.startCommand,
+        };
+    }
 
     imageBuildProps = {
         appId,

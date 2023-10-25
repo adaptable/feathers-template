@@ -38,7 +38,7 @@
     "properties": {
         "buildCommand": {
             "type": "string",
-            "tags": ["go"]
+            "tags": ["go", "php"]
         },
         "buildEnvironment": {
             "$ref": "#/definitions/environment"
@@ -57,7 +57,7 @@
         },
         "installCommand": {
             "type": "string",
-            "tags": ["go"]
+            "tags": ["go", "php"]
         },
         "nodeRunScripts": {
             "type": "string",

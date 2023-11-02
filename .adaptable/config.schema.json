@@ -44,10 +44,14 @@
             "$ref": "#/definitions/environment"
         },
         "builderType": {
-            "enum": ["paketo", "nixpacks"]
+            "enum": ["paketo", "dockerfile", "nixpacks"]
         },
         "databaseType": {
             "enum": ["mssql", "mongodb", "none", "postgres"]
+        },
+        "dockerfile": {
+            "type": "string",
+            "tags": ["dockerfile"]
         },
         "domains": {
             "$ref": "#/definitions/domains"
@@ -83,7 +87,8 @@
             "type": "string"
         },
         "startCommand": {
-            "type": "string"
+            "type": "string",
+            "tags": ["go", "nodejs", "php", "python"]
         }
     },
     "required": ["databaseType"]

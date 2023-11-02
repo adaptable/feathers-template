@@ -7,7 +7,7 @@
   "license": "BSD",
   "private": true,
   "dependencies": {
-    "@adaptable/client": "^1.22.0",
-    "@adaptable/template": "^1.22.0"
+    "@adaptable/client": "^1.23.0",
+    "@adaptable/template": "^1.23.0"
   }
 }

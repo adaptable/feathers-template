@@ -9,10 +9,12 @@ export interface ConfigDomain {
 
 export type ConfigDomains = ConfigDomain[];
 
+export type BuilderType = "paketo" | "dockerfile" | "nixpacks";
+
 export interface Config {
     buildCommand?: string;
     buildEnvironment?: EnvSimple;
-    builderType?: "paketo" | "dockerfile" | "nixpacks";
+    builderType?: BuilderType;
     databaseType: "mongodb" | "mssql" | "none" | "postgres";
     dockerfile?: string;
     domains: ConfigDomains;

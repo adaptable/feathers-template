@@ -3,6 +3,17 @@
 
 const { loadAdaptableAppConfig } = require("@adaptable/template");
 
+/**
+ * @typedef {import("../common").Config} AppConfig
+ * @typedef {import("../common").BuilderType} BuilderType
+ * @typedef {import("@adaptable/client/dist/api-types/builds").CreateBuild} CreateBuild
+ * @typedef {CreateBuild["config"]} BuildConfig
+ *
+ * @typedef {object} BuildInfo
+ * @property {BuildConfig} config
+ * @property {Record<string, string | undefined>} env
+ */
+
 // IMPORTANT: Update config.schema.json when the buildpack/nixpacks image changes
 // Node, Python, or other runtime versions.
 const defaultBuilderImage = "paketobuildpacks/builder:0.2.443-full";
@@ -23,16 +34,6 @@ function stripUndef(obj) {
 
     return ret;
 }
-
-/**
- * @typedef {import("../common").Config} AppConfig
- * @typedef {import("@adaptable/client/dist/api-types/builds").CreateBuild} CreateBuild
- * @typedef {CreateBuild["config"]} BuildConfig
- *
- * @typedef {object} BuildInfo
- * @property {BuildConfig} config
- * @property {Record<string, string | undefined>} env
- */
 
 /**
  * @param {AppConfig} appConfig
@@ -196,11 +197,20 @@ function nixpacksBuilder(appConfig, tags) {
 }
 
 /**
+ * @type {Record<BuilderType, (ac: AppConfig, tags: string[]) => BuildInfo>}
+ */
+const builders = {
+    dockerfile: dockerfileBuilder,
+    nixpacks: nixpacksBuilder,
+    paketo: paketoBuilder,
+};
+
+/**
  * @returns {CreateBuild}
  */
 function makeBuildProps() {
     /**
-     * @type {import("../common").Config}
+     * @type {AppConfig}
      */
     const appConfig = loadAdaptableAppConfig();
 
@@ -230,13 +240,10 @@ function makeBuildProps() {
         builderType = "paketo";
     }
 
-    /**
-     * @type {BuildInfo}
-     */
-    // eslint-disable-next-line no-nested-ternary
-    const { config, env } = builderType === "paketo" ? paketoBuilder(appConfig, tags)
-        : builderType === "dockerfile" ? dockerfileBuilder(appConfig, tags)
-            : nixpacksBuilder(appConfig, tags);
+    const builder = builders[builderType];
+    if (!builder) throw new Error(`Internal error: no builder for '${builderType}'`);
+
+    const { config, env } = builder(appConfig, tags);
 
     /** @type {CreateBuild} */
     const imageBuildProps = {

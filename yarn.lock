@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@1.23.0":
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.23.0.tgz#95140c81259da2fa09c207d63ccaa9ec0d2dd017"
-  integrity sha512-sFgq46bHBHtOhMqr2O/G1gMRVQwCvqu2DH6igUysMi0Sz/6MP+qREwpzkKG2uzV1GnublHAkii3pdYYL8G+axg==
+"@adaptable/client@1.24.0":
+  version "1.24.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.24.0.tgz#87c8091f4e37935b926c1e1310ff3762e37feffe"
+  integrity sha512-zxjbyeA6xq8K+rl6vtz0vxU6Iu+UGgUaTvEsJt6OVvP9cnSiNak9UpqD6zfmyAgVPlQPLFT0mHROUpJpBwjK3Q==
   dependencies:
     "@adaptable/utils" "1.23.0"
     "@adobe/node-fetch-retry" "^1.1.1"
@@ -20,12 +20,12 @@
     yup "^1.0.0-beta.8"
     zod "^3.22.1"
 
-"@adaptable/cloud@^1.23.0":
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.23.0.tgz#d696d12ef6c492ba7dffb9ca6ab30d89694d8a10"
-  integrity sha512-Hd7qHWp424yQhyu0ipDZzFeGT6CPow6ciqNdn+gTkeJ+/Odyg/ZCK+PaeqsQ/IQSGFiVQjAitPrFOVzSYnxUkg==
+"@adaptable/cloud@^1.24.0":
+  version "1.24.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.24.0.tgz#c57c5a16c0ddbe1fe7ceab8c546783d0135c5b23"
+  integrity sha512-aRZvXtVZpEJ2p8LfgNTtAL1AQRK7U/ou+J2A8S2nDjLo3vgBnQH9Va+U61uozzp4MMG/VJ8AIpMSaHq5P+osiw==
   dependencies:
-    "@adaptable/client" "1.23.0"
+    "@adaptable/client" "1.24.0"
     "@adaptable/utils" "1.23.0"
     "@adpt/utils" "^0.4.0-next.25"
     fast-deep-equal "^3.1.3"

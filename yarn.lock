@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@1.24.0":
-  version "1.24.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.24.0.tgz#87c8091f4e37935b926c1e1310ff3762e37feffe"
-  integrity sha512-zxjbyeA6xq8K+rl6vtz0vxU6Iu+UGgUaTvEsJt6OVvP9cnSiNak9UpqD6zfmyAgVPlQPLFT0mHROUpJpBwjK3Q==
+"@adaptable/client@1.25.0":
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.25.0.tgz#7f45c623ec4dcdc736bf4a6401393c96aa5fe9a5"
+  integrity sha512-QbzMp+8UHR39WLC944ZxzN4zxII3zX11lxcD0WUuHmkQqEiZ2eD4b1Cfq6UtQcAGRIwu7eA/JkXJbL3sIsi7lg==
   dependencies:
-    "@adaptable/utils" "1.23.0"
+    "@adaptable/utils" "1.25.0"
     "@adobe/node-fetch-retry" "^1.1.1"
     "@adpt/utils" "0.4.0-next.25"
     "@feathersjs/authentication-client" "^4.5.15"
@@ -20,32 +20,32 @@
     yup "^1.0.0-beta.8"
     zod "^3.22.1"
 
-"@adaptable/cloud@^1.24.0":
-  version "1.24.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.24.0.tgz#c57c5a16c0ddbe1fe7ceab8c546783d0135c5b23"
-  integrity sha512-aRZvXtVZpEJ2p8LfgNTtAL1AQRK7U/ou+J2A8S2nDjLo3vgBnQH9Va+U61uozzp4MMG/VJ8AIpMSaHq5P+osiw==
+"@adaptable/cloud@1.25.0":
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.25.0.tgz#2c28c3865bba23c159a66dda531a5aca5146be25"
+  integrity sha512-YCT6tWZlHAE9K2i2GHETsFrzRTPas4WMQQPBjaHsV1cylLlIk69zHYkr5InyG/YKXZlavkZC5jrv7nw3AKF6MA==
   dependencies:
-    "@adaptable/client" "1.24.0"
-    "@adaptable/utils" "1.23.0"
+    "@adaptable/client" "1.25.0"
+    "@adaptable/utils" "1.25.0"
     "@adpt/utils" "^0.4.0-next.25"
     fast-deep-equal "^3.1.3"
     json-stable-stringify "^1.0.1"
     lodash "^4.17.21"
 
-"@adaptable/template@^1.23.0":
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.23.0.tgz#5135cc6dbb7ee57d795e4e3a685c87d2e8d2dfd0"
-  integrity sha512-Jjrml5p13epCiyCDt65ckUo8+Mg0QpmPpcUNgMLL61wPfVo/JL21WIkdJgS16FLhqg0h0dmnH3KEB922JaJW2w==
+"@adaptable/template@1.25.0":
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.25.0.tgz#3e5adfe02d4edb098507108b8baac3f64d811d06"
+  integrity sha512-HUBPCZ6GlIblIUd/CrW/5zsMlcz/5Qw7ep3cxKubifhmQPaeFTEb6rM1dUiUz5R0ErVCNuW7ysAraPGJzYcq6Q==
   dependencies:
-    "@adaptable/utils" "1.23.0"
+    "@adaptable/utils" "1.25.0"
     dotenv "^8.2.0"
     js-yaml "^3.14.0"
     json5 "^2.1.3"
 
-"@adaptable/utils@1.23.0":
-  version "1.23.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.23.0.tgz#9b3684202f87496c29dd3565dc8d28a9b3398a72"
-  integrity sha512-0XVUgfp9L2MWIf+vnTCQ2BMu9QOjRqbn8hExuCrRiq+el4sz7t0pn63ZiSo9onU3PpUJBro9uRki4TpMeSzyTQ==
+"@adaptable/utils@1.25.0":
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.25.0.tgz#a381d6afe86626e76664fff7a49998f8a4edf57e"
+  integrity sha512-vC/kXvi6gHQ+sRl6eXIUJv5+AjGp3unTrCQOXlmEze3l6wHCgINJcvWSVTJtOcT+F9XkXzWTbvTDm+nkZ2dahw==
   dependencies:
     "@feathersjs/feathers" "^4.5.15"
     ajv "^8.12.0"

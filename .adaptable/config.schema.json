@@ -33,6 +33,44 @@
             "items": {
                 "$ref": "#/definitions/domain"
             }
+        },
+        "resourceConfig": {
+            "type": "object",
+            "properties": {
+                "vCpus": {
+                    "anyOf": [{
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "exclusiveMaximum": 1,
+                        "multipleOf": 0.25
+                    }, {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 4
+                    }]
+                },
+                "memory": {
+                    "type": "integer",
+                    "minimum": 256,
+                    "maximum": 32768,
+                    "multipleOf": 256
+                },
+                "maxConcurrentRequestsPerInstance": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000
+                },
+                "maxInstances": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000
+                },
+                "minInstances": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1000
+                }
+            }
         }
     },
     "properties": {
@@ -85,6 +123,9 @@
         },
         "repoSubdir": {
             "type": "string"
+        },
+        "resourceConfig": {
+            "$ref": "#/definitions/resourceConfig"
         },
         "startCommand": {
             "type": "string",

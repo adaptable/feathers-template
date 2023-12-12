@@ -1,3 +1,4 @@
+import { ResourceConfig } from "@adaptable/cloud";
 import { loadAdaptableAppConfig } from "@adaptable/template";
 import { EnvSimple } from "@adpt/cloud";
 
@@ -26,6 +27,7 @@ export interface Config {
     projectPath?: string;
     pythonVersion?: string;
     repoSubdir?: string;
+    resourceConfig?: ResourceConfig;
     startCommand?: string;
 }
 

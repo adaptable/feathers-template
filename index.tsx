@@ -185,6 +185,7 @@ function App() {
                     name="app"
                     plan="hobby"
                     port={port}
+                    resourceConfig={config.resourceConfig ?? {}}
                 />
             ) : null}
             {ctrHost ? (

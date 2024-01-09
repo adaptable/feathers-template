@@ -146,6 +146,10 @@ function nixpacksBuilder(appConfig, tags) {
     const variables = stripUndef({
         NIXPACKS_NODE_VERSION: appConfig.nodeVersion,
         NIXPACKS_PYTHON_VERSION: appConfig.pythonVersion,
+        // Ensure HOME is set correctly. The built image doesn't seem to contain
+        // an explicit setting and Kubernetes' runtime seems to default to
+        // using /home, which is different from Docker which defaults to /root.
+        HOME: "/root",
     });
 
     /**

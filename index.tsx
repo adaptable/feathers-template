@@ -26,7 +26,10 @@ import { config, ConfigDomains } from "./common";
 import { prodStyle } from "./styles";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { imageBuildProps } = require("./startup/buildInfo");
+const { adaptEnv, imageBuildProps } = require("./startup/buildInfo");
+
+// Apply adaptEnv to the current process environment
+Object.assign(process.env, adaptEnv || {});
 
 const {
     adaptableDomainName, appId, appName,

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const { loadAdaptableAppConfig } = require("@adaptable/template");
+const { certBundle1 } = require("@adaptable/utils");
 
 /**
  * @typedef {import("../common").Config} AppConfig
@@ -161,6 +162,15 @@ function nixpacksBuilder(appConfig, tags) {
         phases: {},
     };
 
+    // Setup phase
+    plan.phases.setup = {
+        cmds: [
+            "...",
+            `cp ${certBundle1.imagePathRel} /usr/local/share/ca-certificates/adaptable1.crt`,
+            "update-ca-certificates",
+        ],
+    };
+
     // Install phase
     if (appConfig.installCommand) {
         plan.phases.install = {
@@ -210,6 +220,35 @@ const builders = {
 };
 
 /**
+ * @returns {BuilderType}
+ */
+function getBuilderType() {
+    /**
+     * @type {AppConfig}
+     */
+    const appConfig = loadAdaptableAppConfig();
+    const { builderType } = appConfig;
+    const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
+
+    if (tags.includes("go") || tags.includes("php")) {
+        if (builderType === "paketo") {
+            const msg = `${tags.join("+")} not currently supported with paketo builderType. Use nixpacks instead.`;
+            // eslint-disable-next-line no-console
+            console.log(msg);
+            throw new Error(msg);
+        }
+        return "nixpacks";
+    }
+    if (tags.includes("dockerfile")) {
+        return "dockerfile";
+    }
+    if (!builderType) {
+        return "paketo";
+    }
+    return builderType;
+}
+
+/**
  * @returns {CreateBuild}
  */
 function makeBuildProps() {
@@ -226,23 +265,9 @@ function makeBuildProps() {
 
     const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
 
-    let { builderType } = appConfig;
-
     const userEnv = appConfig.buildEnvironment || {};
 
-    if (tags.includes("go") || tags.includes("php")) {
-        if (builderType === "paketo") {
-            const msg = `${tags.join("+")} not currently supported with paketo builderType. Use nixpacks instead.`;
-            // eslint-disable-next-line no-console
-            console.log(msg);
-            throw new Error(msg);
-        }
-        builderType = "nixpacks";
-    } else if (tags.includes("dockerfile")) {
-        builderType = "dockerfile";
-    } else if (!builderType) {
-        builderType = "paketo";
-    }
+    const builderType = getBuilderType();
 
     const builder = builders[builderType];
     if (!builder) throw new Error(`Internal error: no builder for '${builderType}'`);
@@ -268,4 +293,33 @@ function makeBuildProps() {
     return imageBuildProps;
 }
 
+/**
+ * @returns {Record<string,string|undefined>}
+ */
+function makeAdaptEnv() {
+    /**
+     * @type {Record<string,string|undefined>}
+     */
+    const env = {};
+
+    const builderType = getBuilderType();
+
+    switch (builderType) {
+        case "dockerfile":
+            env.IMAGE_WORKSPACE_DIR = "/";
+            break;
+        case "nixpacks":
+            env.IMAGE_WORKSPACE_DIR = "/app";
+            break;
+        case "paketo":
+            env.IMAGE_WORKSPACE_DIR = "/workspace";
+            break;
+        default:
+            throw new Error(`Unhandled builderType '${builderType}'`);
+    }
+
+    return env;
+}
+
 module.exports.imageBuildProps = makeBuildProps();
+module.exports.adaptEnv = makeAdaptEnv();

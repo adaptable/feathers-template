@@ -112,7 +112,7 @@ function App() {
     // const image = useMethod(imgHand, "latestImage");
     // const imageStr = image?.registryRef;
     const imageStr = computeRegistryRef(imageBuildProps.imageName);
-    const [initialDatabaseType] = useState(config.databaseType);
+    const [initialDatabaseType, setInitialDatabaseType] = useState(config.databaseType);
 
     // Debug code for an error seen only once in system testing
     if (typeof initialDatabaseType !== "string") {
@@ -120,7 +120,12 @@ function App() {
     }
 
     if (config.databaseType !== initialDatabaseType) {
-        throw new Error(`databaseType cannot be changed from ${initialDatabaseType} to ${config.databaseType} without data loss.  Please restore the value of databaseType in the config or contact support for help.`);
+        if (initialDatabaseType === "none") {
+            // Allow one time change from none
+            setInitialDatabaseType(config.databaseType);
+        } else {
+            throw new Error(`databaseType cannot be changed from ${initialDatabaseType} to ${config.databaseType} without data loss.  Please restore the value of databaseType in the config or contact support for help.`);
+        }
     }
 
     const ctrHand = handle();

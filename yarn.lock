@@ -2,14 +2,13 @@
 # yarn lockfile v1
 
 
-"@adaptable/client@1.26.0":
-  version "1.26.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.26.0.tgz#9e7a9f8302ccdea6c90028d12927565332bcd617"
-  integrity sha512-aAGb3RokTFYJeHRqjqeVN2aBFUpdW/yWQkmK5NwA3c5oIlFQPzPwwb+2js0mWsz2GY/XRtXEDjkSf8IMvj0+4A==
+"@adaptable/client@1.27.0":
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/client/-/client-1.27.0.tgz#35fb880195d4bdc0e4171ea12f1b1c4087c4c434"
+  integrity sha512-17ErMVK1yJvIsJEbBp2JtCdRsJcQc/XkDKiPGoupKIEM64qakG2GvClU3ucGShdcYurU8dJR5zgR0KpLtfUAmA==
   dependencies:
-    "@adaptable/utils" "1.26.0"
+    "@adaptable/utils" "1.27.0"
     "@adobe/node-fetch-retry" "^1.1.1"
-    "@adpt/utils" "0.4.0-next.25"
     "@feathersjs/authentication-client" "^4.5.15"
     "@feathersjs/feathers" "^4.5.15"
     "@feathersjs/rest-client" "^4.5.15"
@@ -20,32 +19,32 @@
     yup "^1.0.0-beta.8"
     zod "^3.22.1"
 
-"@adaptable/cloud@1.26.0":
-  version "1.26.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.26.0.tgz#2acfd7c59c7df52e9bee42bbba8582709e790004"
-  integrity sha512-54lORrXgTFGWtaONBvRQaJKUexoYbpoN+2kSligwgecpA8bhM+OBgmosawp8Z4ZgZa4B8gCkeCXoZL0/V9QlHw==
+"@adaptable/cloud@1.27.0":
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/cloud/-/cloud-1.27.0.tgz#c6747c55a40945a9766e78504d22960b9c11134d"
+  integrity sha512-JUp5v/aXBhlrX3Qx8Y6h6t3i7bbHpm4yp6TdRaEqE1A0fxqmSgTDlLqRdHp/8BvawfxSwPK/vce6Oqodqc3gtQ==
   dependencies:
-    "@adaptable/client" "1.26.0"
-    "@adaptable/utils" "1.26.0"
+    "@adaptable/client" "1.27.0"
+    "@adaptable/utils" "1.27.0"
     "@adpt/utils" "^0.4.0-next.25"
     fast-deep-equal "^3.1.3"
     json-stable-stringify "^1.0.1"
     lodash "^4.17.21"
 
-"@adaptable/template@1.26.0":
-  version "1.26.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.26.0.tgz#714fc49a8f9d905ded951e31e684a300fb026b73"
-  integrity sha512-fD6ie0HE5KD2SAcGT2OHXWEt+IkQPOZeGoR5taDxX51AkOBZeHwSGG6/fSTGNIXFg24k/KNqoWvMcTrQCYuK0g==
+"@adaptable/template@1.27.0":
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/template/-/template-1.27.0.tgz#a82e4e2ac0c8af2383b781d625d6e6946b919fa4"
+  integrity sha512-w25kJ7RTOM66XEBq9eFQjRtuxG4rDf2DBbelEBMP6dz55sVO5FrceEfb6WXNXySMxl5d2f6KB+snVKX7+lDPbA==
   dependencies:
-    "@adaptable/utils" "1.26.0"
+    "@adaptable/utils" "1.27.0"
     dotenv "^8.2.0"
     js-yaml "^3.14.0"
     json5 "^2.1.3"
 
-"@adaptable/utils@1.26.0":
-  version "1.26.0"
-  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.26.0.tgz#c30cf3370e663d78a65a832654c12535bf79ac41"
-  integrity sha512-7MhUT+iIAlXglToIeihOlsLEO37mPU2Nr+G9tLLKZPi557svy/ZwSh8K1Y+5rbCPQ5r2QsxKuZCW/e9oL4myHw==
+"@adaptable/utils@1.27.0":
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/@adaptable/utils/-/utils-1.27.0.tgz#dd87ac7b3cea42d1ed7ec52770ae6d0010197053"
+  integrity sha512-kJjglcjluo5KekgUSaG/8qvnj3XQH32+MpbgnmYaEG+6ghchvZSKn2ZfWV93atvf3nkDIK8Kdgg9BfILDmM2gA==
   dependencies:
     "@feathersjs/feathers" "^4.5.15"
     ajv "^8.12.0"
@@ -143,39 +142,6 @@
     ts-custom-error "3.2.0"
     tslib "2.0.3"
     xml2js "0.4.23"
-
-"@adpt/utils@0.4.0-next.25":
-  version "0.4.0-next.25"
-  resolved "https://registry.yarnpkg.com/@adpt/utils/-/utils-0.4.0-next.25.tgz#8f425e10f5026b3fa8bd9a8255a916760e8a08a1"
-  integrity sha512-PX0gj52w9sGW9PTzh1tmlusEcHA1YmICMdRiYp4C+B0RtFLHlUe1vKuZT9e1sdgbUmhyY3M90mCj7gkQjs2A6w==
-  dependencies:
-    "@types/debug" "4.1.5"
-    "@types/fs-extra" "8.1.1"
-    "@types/jju" "1.4.1"
-    "@types/tar" "4.0.4"
-    "@unboundedsystems/node-graceful" "3.0.0-unb.2"
-    "@usys/collections-ts" "0.0.2"
-    capture-exit "2.0.0"
-    debug "4.3.1"
-    decamelize "4.0.0"
-    deep-diff "1.0.2"
-    eventemitter2 "6.4.3"
-    execa "5.0.0"
-    find-up "5.0.0"
-    fs-extra "9.0.1"
-    global-dirs "2.0.1"
-    jju "1.4.0"
-    json-stable-stringify "1.0.1"
-    json5-with-undefined "2.1.301"
-    lodash "4.17.20"
-    node-fetch "2.6.1"
-    npm-run-path "4.0.1"
-    p-defer "3.0.0"
-    tar "6.0.5"
-    ts-custom-error "3.2.0"
-    tslib "2.0.3"
-    type-ops "3.0.3"
-    yarn "1.22.10"
 
 "@adpt/utils@0.4.0-next.26", "@adpt/utils@^0.4.0-next.25", "@adpt/utils@^0.4.0-next.26":
   version "0.4.0-next.26"

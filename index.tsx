@@ -119,9 +119,9 @@ function App() {
         throw new Error(`InternalError: initialDatabaseType was not a string, got ${inspect(initialDatabaseType, false, null)}, config.databaseType is ${inspect(config.databaseType, false, null)}`);
     }
 
-    if (config.databaseType !== initialDatabaseType) {
-        throw new Error(`databaseType cannot be changed from ${initialDatabaseType} to ${config.databaseType} without data loss.  Please restore the value of databaseType in the config or contact support for help.`);
-    }
+    // if (config.databaseType !== initialDatabaseType) {
+    //     throw new Error(`databaseType cannot be changed from ${initialDatabaseType} to ${config.databaseType} without data loss.  Please restore the value of databaseType in the config or contact support for help.`);
+    // }
 
     const ctrHand = handle();
     const ctrUrl = useAsync(

@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+import { CreateBuild } from "@adaptable/client/dist/api-types/builds";
 import {
     config as adaptableConfig,
     ContainerImage,
@@ -26,7 +28,10 @@ import { config, ConfigDomains } from "./common";
 import { prodStyle } from "./styles";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { adaptEnv, imageBuildProps } = require("./startup/buildInfo");
+const buildInfo = require("./startup/buildInfo");
+
+const adaptEnv = buildInfo.adaptEnv;
+const imageBuildProps: CreateBuild = buildInfo.imageBuildProps;
 
 // Apply adaptEnv to the current process environment
 Object.assign(process.env, adaptEnv || {});
@@ -153,6 +158,10 @@ function App() {
         // two reverse proxies.
         ADAPTABLE_TRUST_PROXY_DEPTH: "2",
     };
+
+    if (imageBuildProps.config.type === "buildpack") {
+        standardEnv.HOME = "/home/cnb"; // Override our runtime default in the container service
+    }
 
     // Remove PORT from the container environment
     const { PORT, ...env } = mergeEnvSimple(dbEnv, standardEnv, config.environment) || {};

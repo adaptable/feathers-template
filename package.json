@@ -6,6 +6,7 @@
   "license": "BSD",
   "private": true,
   "dependencies": {
+    "@adaptable/client": "1.27.0",
     "@adaptable/cloud": "1.27.0",
     "@adaptable/template": "1.27.0",
     "@adpt/cloud": "^0.4.0-next.26",

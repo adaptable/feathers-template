@@ -20,7 +20,16 @@ const { certBundle1 } = require("@adaptable/utils");
 // Node, Python, or other runtime versions.
 const defaultBuilderImage = "paketobuildpacks/builder:0.2.443-full";
 const oldBuilderImage = "paketobuildpacks/builder:0.2.6-full";
-const nixpacksVersion = "1.18.0";
+
+// Versions:
+// - Go: 1.18-1.22 (defaults to 1.22 on version mismatch)
+// - Node: 18, 20, 22
+// - PHP: 8.1-8.3
+// - Python: 3.7-3.12
+const nixpacksCurrentVersion = "1.24.1";
+
+// Last version to support Node 16
+const nixpacksOldVersion = "1.21.3";
 
 /**
  * @param {Record<string, string | undefined>} obj
@@ -158,7 +167,33 @@ function nixpacksBuilder(appConfig, tags) {
         // php-fpm -D instead of backgrounding via shell ("&"). This allows
         // php-fpm to start and background itself so that it is ready to
         // accept connections when nginx is started.
-        appConfig.startCommand = "perl /assets/prestart.pl /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)";
+        appConfig.startCommand = "node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)";
+    }
+
+    let version = nixpacksCurrentVersion;
+
+    if (tags.includes("nodejs")) {
+        switch (appConfig.nodeVersion) {
+            case "12":
+            case "14":
+                throw new Error(`builderType nixpacks does not support Node v${appConfig.nodeVersion}. Use builderType paketo.`);
+            case "16":
+                version = nixpacksOldVersion;
+                break;
+            default:
+                // Normal case
+                break;
+        }
+    }
+
+    if (tags.includes("python")) {
+        switch (appConfig.pythonVersion) {
+            case "3.6":
+                throw new Error(`builderType nixpacks does not support Python v${appConfig.pythonVersion}. Use builderType paketo.`);
+            default:
+                // Normal case
+                break;
+        }
     }
 
     const variables = stripUndef({
@@ -231,7 +266,7 @@ function nixpacksBuilder(appConfig, tags) {
     return {
         config: {
             type: "nixpacks",
-            version: nixpacksVersion,
+            version,
             plan,
         },
         env: {},

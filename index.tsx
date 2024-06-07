@@ -71,7 +71,7 @@ function parsePort(port: string) {
 }
 
 function makeDomainName(s: string) {
-    const subs = s.replace(/[^A-Za-z0-9-]/g, "-").slice(0, 48);
+    const subs = s.replace(/[^A-Za-z0-9-]/g, "-").slice(0, 48).toLowerCase();
     const hash = sha256hex(s).slice(0, 6);
     return `${subs}-${hash}`;
 }

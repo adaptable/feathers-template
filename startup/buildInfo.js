@@ -2,7 +2,17 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const { loadAdaptableAppConfig } = require("@adaptable/template");
-const { certBundle1 } = require("@adaptable/utils");
+const { certBundle1, getEnv, REQUIRED } = require("@adaptable/utils");
+
+// A little duplicated from @adaptable/cloud but adding that lib causes
+// weird errors.
+const adaptableDomainName = getEnv("ADAPTABLE_DOMAIN_NAME", REQUIRED);
+const appId = getEnv("ADAPTABLE_APP_ID", REQUIRED);
+const appName = getEnv("ADAPTABLE_APP_NAME", REQUIRED);
+const revId = getEnv("ADAPTABLE_APPREVISION_ID", REQUIRED);
+
+const externalHostname = `${appName}.${adaptableDomainName}`;
+const externalUrl = `https://${externalHostname}`;
 
 /**
  * @typedef {import("../common").Config} AppConfig
@@ -156,11 +166,21 @@ function dockerfileBuilder(appConfig, tags) {
  */
 function nixpacksBuilder(appConfig, tags) {
     let providers;
+    let version = nixpacksCurrentVersion;
 
     if (tags.includes("nodejs")) providers = ["node"];
     else if (tags.includes("python")) providers = ["python"];
     else if (tags.includes("go")) providers = ["go"];
     else if (tags.includes("php")) providers = ["php"];
+
+    const variables = stripUndef({
+        NIXPACKS_NODE_VERSION: appConfig.nodeVersion,
+        NIXPACKS_PYTHON_VERSION: appConfig.pythonVersion,
+        // Ensure HOME is set correctly. The built image doesn't seem to contain
+        // an explicit setting and Kubernetes' runtime seems to default to
+        // using /home, which is different from Docker which defaults to /root.
+        HOME: "/root",
+    });
 
     if (tags.includes("php") && !appConfig.startCommand) {
         // This is the same command as nixpacks generates except it uses
@@ -170,7 +190,10 @@ function nixpacksBuilder(appConfig, tags) {
         appConfig.startCommand = "node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)";
     }
 
-    let version = nixpacksCurrentVersion;
+    if (tags.includes("laravel")) {
+        variables.APP_URL = externalUrl;
+        variables.ASSET_URL = externalUrl;
+    }
 
     if (tags.includes("nodejs")) {
         switch (appConfig.nodeVersion) {
@@ -195,15 +218,6 @@ function nixpacksBuilder(appConfig, tags) {
                 break;
         }
     }
-
-    const variables = stripUndef({
-        NIXPACKS_NODE_VERSION: appConfig.nodeVersion,
-        NIXPACKS_PYTHON_VERSION: appConfig.pythonVersion,
-        // Ensure HOME is set correctly. The built image doesn't seem to contain
-        // an explicit setting and Kubernetes' runtime seems to default to
-        // using /home, which is different from Docker which defaults to /root.
-        HOME: "/root",
-    });
 
     /**
      * @type Record<string, any>
@@ -320,12 +334,6 @@ function makeBuildProps() {
      * @type {AppConfig}
      */
     const appConfig = loadAdaptableAppConfig();
-
-    const appId = process.env.ADAPTABLE_APP_ID;
-    if (appId == null) throw new Error("No ADAPTABLE_APP_ID found");
-
-    const revId = process.env.ADAPTABLE_APPREVISION_ID;
-    if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
 
     const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
 

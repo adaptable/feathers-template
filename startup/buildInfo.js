@@ -2,7 +2,17 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const { loadAdaptableAppConfig } = require("@adaptable/template");
-const { certBundle1 } = require("@adaptable/utils");
+const { certBundle1, getEnv, REQUIRED } = require("@adaptable/utils");
+
+// A little duplicated from @adaptable/cloud but adding that lib causes
+// weird errors.
+const adaptableDomainName = getEnv("ADAPTABLE_DOMAIN_NAME", REQUIRED);
+const appId = getEnv("ADAPTABLE_APP_ID", REQUIRED);
+const appName = getEnv("ADAPTABLE_APP_NAME", REQUIRED);
+const revId = getEnv("ADAPTABLE_APPREVISION_ID", REQUIRED);
+
+const externalHostname = `${appName}.${adaptableDomainName}`;
+const externalUrl = `https://${externalHostname}`;
 
 /**
  * @typedef {import("../common").Config} AppConfig
@@ -170,6 +180,11 @@ function nixpacksBuilder(appConfig, tags) {
         HOME: "/root",
     });
 
+    if (tags.includes("laravel")) {
+        variables.APP_URL = externalUrl;
+        variables.ASSET_URL = externalUrl;
+    }
+
     /**
      * @type Record<string, any>
      */
@@ -285,12 +300,6 @@ function makeBuildProps() {
      * @type {AppConfig}
      */
     const appConfig = loadAdaptableAppConfig();
-
-    const appId = process.env.ADAPTABLE_APP_ID;
-    if (appId == null) throw new Error("No ADAPTABLE_APP_ID found");
-
-    const revId = process.env.ADAPTABLE_APPREVISION_ID;
-    if (revId == null) throw new Error("No ADAPTABLE_APPREVISION_ID");
 
     const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
 

@@ -165,13 +165,13 @@ function dockerfileBuilder(appConfig, tags) {
  * @returns {BuildInfo}
  */
 function nixpacksBuilder(appConfig, tags) {
-    let providers;
+    const providers = [];
     let version = nixpacksCurrentVersion;
 
-    if (tags.includes("nodejs")) providers = ["node"];
-    else if (tags.includes("python")) providers = ["python"];
-    else if (tags.includes("go")) providers = ["go"];
-    else if (tags.includes("php")) providers = ["php"];
+    if (tags.includes("nodejs") || appConfig.nodeVersion) providers.push("node");
+    if (tags.includes("python") || appConfig.pythonVersion) providers.push("python");
+    if (tags.includes("go")) providers.push("go");
+    if (tags.includes("php")) providers.push("php");
 
     const variables = stripUndef({
         NIXPACKS_NODE_VERSION: appConfig.nodeVersion,

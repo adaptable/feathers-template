@@ -40,6 +40,8 @@ const {
     adaptableDomainName, appId, appName,
 } = adaptableConfig();
 
+const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
+
 const computeRegistryRef = (imageName: string) => {
     const revNumber = process.env.ADAPTABLE_APPREVISION_NUMBER;
     const dockerRepo = process.env.ADAPTABLE_DOCKER_REPO;
@@ -148,7 +150,8 @@ function App() {
     }
 
     const dbHand = handle();
-    const dbEnv = useConnectTo(dbHand);
+    const dbEnvOrig = useConnectTo(dbHand);
+    const dbEnv = mergeEnvSimple(dbEnvOrig) || {};
     const externalHostname = `${appName}.${adaptableDomainName}`;
     const standardEnv: EnvSimple = {
         EXTERNAL_HOSTNAME: externalHostname,
@@ -161,6 +164,11 @@ function App() {
 
     if (imageBuildProps.config.type === "buildpack") {
         standardEnv.HOME = "/home/cnb"; // Override our runtime default in the container service
+    }
+
+    if (tags.includes("laravel")) {
+        // Laravel uses DB_URL
+        if (dbEnv.DATABASE_URL) dbEnv.DB_URL = dbEnv.DATABASE_URL;
     }
 
     // Remove PORT from the container environment

@@ -228,12 +228,13 @@ function nixpacksBuilder(appConfig, tags) {
         phases: {},
     };
 
-    // Setup phase
-    plan.phases.setup = {
+    // Adaptable setup
+    plan.phases.asetup = {
+        onlyIncludeFiles: [
+            certBundle1.imagePathRel,
+        ],
         cmds: [
-            "...",
-            `cp ${certBundle1.imagePathRel} /usr/local/share/ca-certificates/adaptable1.crt`,
-            "update-ca-certificates",
+            `cp ${certBundle1.imagePathRel} /usr/local/share/ca-certificates/adaptable1.crt && update-ca-certificates`,
         ],
     };
 

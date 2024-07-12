@@ -159,6 +159,28 @@ function dockerfileBuilder(appConfig, tags) {
     };
 }
 
+// This is the same command as nixpacks generates except it uses
+// php-fpm -D instead of backgrounding via shell ("&"). This allows
+// php-fpm to start and background itself so that it is ready to
+// accept connections when nginx is started.
+const startPhpScript = `#!/usr/bin/env bash
+node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)
+`;
+
+// This script runs on the workspace before nixpacks (as the pre-build script).
+// One important use is to allow the template to inject files into the workspace
+// via bash heredoc.
+const workspacePrepScript = `#!/usr/bin/env bash
+
+set -ex -o pipefail
+
+mkdir -p .adaptable/bin
+
+cat << ENDFILE > .adaptable/bin/start-php
+${startPhpScript}ENDFILE
+chmod a+x .adaptable/bin/start-php
+`;
+
 /**
  * @param {AppConfig} appConfig
  * @param {string[]} tags
@@ -183,11 +205,7 @@ function nixpacksBuilder(appConfig, tags) {
     });
 
     if (tags.includes("php") && !appConfig.startCommand) {
-        // This is the same command as nixpacks generates except it uses
-        // php-fpm -D instead of backgrounding via shell ("&"). This allows
-        // php-fpm to start and background itself so that it is ready to
-        // accept connections when nginx is started.
-        appConfig.startCommand = "node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)";
+        appConfig.startCommand = "start-php";
     }
 
     if (tags.includes("laravel")) {
@@ -228,14 +246,25 @@ function nixpacksBuilder(appConfig, tags) {
         phases: {},
     };
 
+    /**
+     * @type BuildConfig
+     */
+    const config = {
+        type: "nixpacks",
+        version,
+        plan,
+        preBuildScript: workspacePrepScript,
+    };
+
     // Adaptable setup
     plan.phases.asetup = {
         onlyIncludeFiles: [
-            certBundle1.imagePathRel,
+            ".adaptable",
         ],
         cmds: [
             `cp ${certBundle1.imagePathRel} /usr/local/share/ca-certificates/adaptable1.crt && update-ca-certificates`,
         ],
+        paths: ["/app/.adaptable/bin"],
     };
 
     // Install phase
@@ -279,11 +308,7 @@ function nixpacksBuilder(appConfig, tags) {
     }
 
     return {
-        config: {
-            type: "nixpacks",
-            version,
-            plan,
-        },
+        config,
         env: {},
         extraBuildProps: { ...(subdir != null ? { subdir } : {}) },
     };

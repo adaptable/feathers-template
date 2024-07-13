@@ -4,6 +4,8 @@
 const { loadAdaptableAppConfig } = require("@adaptable/template");
 const { certBundle1, getEnv, REQUIRED } = require("@adaptable/utils");
 
+const defaultCaddyConfig = require("../caddyConfig");
+
 // A little duplicated from @adaptable/cloud but adding that lib causes
 // weird errors.
 const adaptableDomainName = getEnv("ADAPTABLE_DOMAIN_NAME", REQUIRED);
@@ -159,6 +161,14 @@ function dockerfileBuilder(appConfig, tags) {
     };
 }
 
+function createHeredocFile(filename, contents) {
+    return `
+cat << ENDFILE > ${filename}
+${contents}
+ENDFILE
+`;
+}
+
 // This is the same command as nixpacks generates except it uses
 // php-fpm -D instead of backgrounding via shell ("&"). This allows
 // php-fpm to start and background itself so that it is ready to
@@ -176,8 +186,7 @@ set -ex -o pipefail
 
 mkdir -p .adaptable/bin
 
-cat << ENDFILE > .adaptable/bin/start-php
-${startPhpScript}ENDFILE
+${createHeredocFile(".adaptable/bin/start-php", startPhpScript)}
 chmod a+x .adaptable/bin/start-php
 `;
 
@@ -189,8 +198,14 @@ chmod a+x .adaptable/bin/start-php
 function nixpacksBuilder(appConfig, tags) {
     const providers = [];
     let version = nixpacksCurrentVersion;
+    let preBuildScript = workspacePrepScript;
+    const staticRoot = appConfig.static?.root;
 
-    if (tags.includes("nodejs") || appConfig.nodeVersion) providers.push("node");
+    if (tags.includes("nodejs")
+        || tags.includes("nodejs-static")
+        || appConfig.nodeVersion) {
+        providers.push("node");
+    }
     if (tags.includes("python") || appConfig.pythonVersion) providers.push("python");
     if (tags.includes("go")) providers.push("go");
     if (tags.includes("php")) providers.push("php");
@@ -213,7 +228,7 @@ function nixpacksBuilder(appConfig, tags) {
         variables.ASSET_URL = externalUrl;
     }
 
-    if (tags.includes("nodejs")) {
+    if (tags.includes("nodejs") || tags.includes("nodejs-static")) {
         switch (appConfig.nodeVersion) {
             case "12":
             case "14":
@@ -237,6 +252,11 @@ function nixpacksBuilder(appConfig, tags) {
         }
     }
 
+    if (appConfig.static) {
+        preBuildScript += createHeredocFile(".adaptable/Caddyfile", defaultCaddyConfig(appConfig.static));
+        appConfig.startCommand = `exec caddy run --config .adaptable/Caddyfile`;
+    }
+
     /**
      * @type Record<string, any>
      */
@@ -253,7 +273,7 @@ function nixpacksBuilder(appConfig, tags) {
         type: "nixpacks",
         version,
         plan,
-        preBuildScript: workspacePrepScript,
+        preBuildScript,
     };
 
     // Adaptable setup
@@ -266,6 +286,11 @@ function nixpacksBuilder(appConfig, tags) {
         ],
         paths: ["/app/.adaptable/bin"],
     };
+
+    if (staticRoot) {
+        plan.phases.setup = plan.phases.setup || {};
+        plan.phases.setup.nixPkgs = ["...", "caddy"];
+    }
 
     // Install phase
     if (appConfig.installCommand) {
@@ -334,7 +359,7 @@ function getBuilderType() {
     const { builderType } = appConfig;
     const tags = (process.env.ADAPTABLE_TEMPLATE_TAGS || "").split(",");
 
-    if (tags.includes("go") || tags.includes("php")) {
+    if (tags.includes("go") || tags.includes("php") || tags.includes("nodejs-static")) {
         if (builderType === "paketo") {
             const msg = `${tags.join("+")} not currently supported with paketo builderType. Use nixpacks instead.`;
             // eslint-disable-next-line no-console

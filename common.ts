@@ -12,6 +12,11 @@ export type ConfigDomains = ConfigDomain[];
 
 export type BuilderType = "paketo" | "dockerfile" | "nixpacks";
 
+export interface StaticConfig {
+    root: string;
+    singlePageApp?: boolean;
+}
+
 export interface Config {
     buildCommand?: string;
     buildEnvironment?: EnvSimple;
@@ -29,6 +34,7 @@ export interface Config {
     repoSubdir?: string;
     resourceConfig?: ResourceConfig;
     startCommand?: string;
+    static?: StaticConfig;
 }
 
 export const config = loadAdaptableAppConfig<Config>();

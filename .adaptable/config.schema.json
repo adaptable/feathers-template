@@ -72,6 +72,18 @@
                     "maximum": 1000
                 }
             }
+        },
+        "staticConfig": {
+            "type": "object",
+            "properties": {
+                "root": {
+                    "type": "string"
+                },
+                "singlePageApp": {
+                    "type": "boolean"
+                }
+            },
+            "required": ["root"]
         }
     },
     "properties": {
@@ -131,6 +143,10 @@
         "startCommand": {
             "type": "string",
             "tags": ["go", "nodejs", "php", "python"]
+        },
+        "static": {
+            "$ref": "#/definitions/staticConfig",
+            "tags": ["static"]
         }
     },
     "required": ["databaseType"]

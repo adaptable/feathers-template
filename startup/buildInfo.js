@@ -159,11 +159,17 @@ function dockerfileBuilder(appConfig, tags) {
     };
 }
 
-// This is the same command as nixpacks generates except it uses
+// This final command is the same command as nixpacks generates except it uses
 // php-fpm -D instead of backgrounding via shell ("&"). This allows
 // php-fpm to start and background itself so that it is ready to
 // accept connections when nginx is started.
 const startPhpScript = `#!/usr/bin/env bash
+
+mkdir -p storage/logs
+touch storage/logs/laravel.log
+echo Watching storage/logs/laravel.log
+tail -F storage/logs/laravel.log &
+
 node /assets/scripts/prestart.mjs /assets/nginx.template.conf /nginx.conf && (php-fpm -D -y /assets/php-fpm.conf && nginx -c /nginx.conf)
 `;
 

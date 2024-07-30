@@ -40,11 +40,6 @@
             "properties": {
                 "vCpus": {
                     "anyOf": [{
-                        "type": "number",
-                        "exclusiveMinimum": 0,
-                        "exclusiveMaximum": 1,
-                        "multipleOf": 0.25
-                    }, {
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 4

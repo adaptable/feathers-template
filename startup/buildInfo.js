@@ -96,8 +96,8 @@ function paketoBuilder(appConfig, tags) {
     `;
 
     if (tags.includes("nodejs")) {
-        // Use the older builder for versions < 18
-        if (["12", "14", "16"].includes(appConfig.nodeVersion || "")) {
+        // Use the older builder for version 12
+        if (["12"].includes(appConfig.nodeVersion || "")) {
             config.builder = oldBuilderImage;
 
             // Older builder errors if BP_NODE_RUN_SCRIPTS is the empty string
@@ -105,6 +105,12 @@ function paketoBuilder(appConfig, tags) {
         }
 
         config.buildpacks = [
+            // Updated yarn to work around the builder-embedded version trying
+            // to access broken deps.paketio.io.
+            // Order is important. MUST be before the nodejs buildpack or it
+            // will choose the builder-embedded yarn.
+            "paketobuildpacks/yarn:1.3.10",
+
             "paketo-buildpacks/nodejs",
             // buildpack-launch is required for BP_LAUNCH_COMMAND
             "adaptable/buildpack-launch:0.0.7",

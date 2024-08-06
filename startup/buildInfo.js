@@ -3,6 +3,7 @@
 
 const { loadAdaptableAppConfig } = require("@adaptable/template");
 const { certBundle1, getEnv, REQUIRED } = require("@adaptable/utils");
+const { accessSync, constants } = require("fs");
 
 // A little duplicated from @adaptable/cloud but adding that lib causes
 // weird errors.
@@ -56,6 +57,15 @@ function stripUndef(obj) {
     return ret;
 }
 
+function isYarn(subdir) {
+    try {
+        accessSync(`/tmp/repo/${subdir}/yarn.lock`, constants.R_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
 /**
  * @param {AppConfig} appConfig
  * @param {string[]} tags
@@ -96,6 +106,8 @@ function paketoBuilder(appConfig, tags) {
     `;
 
     if (tags.includes("nodejs")) {
+        config.buildpacks = [];
+
         // Use the older builder for version 12
         if (["12"].includes(appConfig.nodeVersion || "")) {
             config.builder = oldBuilderImage;
@@ -104,17 +116,19 @@ function paketoBuilder(appConfig, tags) {
             if (!env.BP_NODE_RUN_SCRIPTS) delete env.BP_NODE_RUN_SCRIPTS;
         }
 
-        config.buildpacks = [
+        if (isYarn(appConfig.projectPath || ".")) {
             // Updated yarn to work around the builder-embedded version trying
             // to access broken deps.paketio.io.
             // Order is important. MUST be before the nodejs buildpack or it
             // will choose the builder-embedded yarn.
-            "paketobuildpacks/yarn:1.3.10",
+            config.buildpacks.push("paketobuildpacks/yarn:1.3.10");
+        }
 
+        config.buildpacks.push(
             "paketo-buildpacks/nodejs",
             // buildpack-launch is required for BP_LAUNCH_COMMAND
             "adaptable/buildpack-launch:0.0.7",
-        ];
+        );
     } else if (tags.includes("python")) {
         // Use the older builder for versions < 3.10
         if (["3.6", "3.7", "3.8", "3.9"].includes(appConfig.pythonVersion || "")) {
